@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ControlDocente — Gestión de Grupos</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B0F14;--bg2:#111820;--card:#172030;--border:#253347;--text:#E2E8F0;--muted:#6B7F96;--primary:#0EA573;--primary-h:#11C484;--primary-bg:rgba(14,165,115,.1);--accent:#E8991A;--accent-bg:rgba(232,153,26,.1);--danger:#EF4444;--danger-bg:rgba(239,68,68,.1);--success:#22C55E;--warning:#F59E0B;--info:#38BDF8}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 15% -5%,rgba(14,165,115,.07),transparent 55%),radial-gradient(ellipse at 85% 105%,rgba(232,153,26,.04),transparent 55%);pointer-events:none;z-index:0}
+.num{font-family:'Space Grotesk',monospace}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* Sidebar */
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:252px;background:var(--bg2);border-right:1px solid var(--border);z-index:40;display:flex;flex-direction:column;transition:transform .3s}
+.sidebar .logo{padding:22px 18px;border-bottom:1px solid var(--border)}
+.sidebar nav{flex:1;padding:10px 8px;overflow-y:auto}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 14px;border-radius:9px;cursor:pointer;color:var(--muted);font-weight:500;font-size:.9rem;transition:all .2s;border-left:3px solid transparent;margin-bottom:1px}
+.nav-item:hover{background:var(--primary-bg);color:var(--text)}
+.nav-item.active{background:var(--primary-bg);color:var(--primary);border-left-color:var(--primary);font-weight:600}
+.nav-item i{width:18px;text-align:center;font-size:.95rem}
+
+/* Main */
+.main{margin-left:252px;min-height:100vh;position:relative;z-index:1}
+.main-header{padding:18px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(11,15,20,.85);backdrop-filter:blur(14px);position:sticky;top:0;z-index:20;gap:12px;flex-wrap:wrap}
+.main-content{padding:24px 28px}
+.menu-btn{display:none;background:none;border:none;color:var(--text);font-size:1.2rem;cursor:pointer}
+
+/* Componentes */
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:20px;transition:all .25s}
+.stat-card:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.data-card{background:var(--card);border:1px solid var(--border);border-radius:13px;overflow:hidden}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{text-align:left;padding:11px 14px;font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:1px solid var(--border);font-weight:600}
+.tbl td{padding:11px 14px;border-bottom:1px solid rgba(37,51,71,.5);font-size:.88rem;vertical-align:middle}
+.tbl tr:hover td{background:rgba(14,165,115,.03)}
+.tbl tr:last-child td{border-bottom:none}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:20px;font-size:.72rem;font-weight:600}
+.badge-uni{background:var(--primary-bg);color:var(--primary)}
+.badge-cona{background:var(--accent-bg);color:var(--accent)}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:8px;font-size:.84rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit;white-space:nowrap}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-h);box-shadow:0 4px 14px rgba(14,165,115,.3)}
+.btn-accent{background:var(--accent);color:#000}.btn-accent:hover{background:#f0a830}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}.btn-ghost:hover{border-color:var(--text);color:var(--text)}
+.btn-danger{background:var(--danger-bg);color:var(--danger);border:1px solid rgba(239,68,68,.15)}.btn-danger:hover{background:rgba(239,68,68,.18)}
+.btn-sm{padding:5px 10px;font-size:.78rem;border-radius:6px}
+.btn-icon{padding:7px;border-radius:7px;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .2s;flex-shrink:0}
+.btn-icon:hover{border-color:var(--text);color:var(--text)}
+.input{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:.88rem;font-family:inherit;width:100%;transition:border-color .2s;outline:none}
+.input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(14,165,115,.1)}
+.input::placeholder{color:var(--muted)}
+select.input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%236B7F96' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;padding-right:32px;cursor:pointer}
+label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
+.progress{height:7px;background:var(--bg);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;border-radius:4px;transition:width .4s}
+.grade-input{width:64px;text-align:center;background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:7px 4px;color:var(--text);font-family:'Space Grotesk',monospace;font-size:.95rem;font-weight:600;outline:none;transition:border-color .2s}
+.grade-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(14,165,115,.1)}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.show{opacity:1;pointer-events:auto}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:14px;width:100%;max-width:560px;max-height:88vh;overflow-y:auto;transform:scale(.96) translateY(8px);transition:transform .25s}
+.modal-overlay.show .modal{transform:scale(1) translateY(0)}
+.modal-head{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-body{padding:22px}
+.modal-foot{padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
+
+/* Toast */
+.toast-box{position:fixed;top:16px;right:16px;z-index:200;display:flex;flex-direction:column;gap:6px}
+.toast{padding:12px 18px;border-radius:9px;font-size:.84rem;font-weight:500;display:flex;align-items:center;gap:9px;animation:tIn .3s;min-width:260px;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.toast-success{background:#14532d;border:1px solid #166534;color:#86efac}
+.toast-error{background:#7f1d1d;border:1px solid #991b1b;color:#fca5a5}
+.toast-info{background:#0c4a6e;border:1px solid #075985;color:#7dd3fc}
+@keyframes tIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes tOut{to{opacity:0;transform:translateX(30px)}}
+
+/* Asistencia */
+.att-btn{width:36px;height:32px;border-radius:6px;border:2px solid var(--border);background:transparent;cursor:pointer;font-size:.72rem;font-weight:700;transition:all .15s;font-family:'Space Grotesk',monospace}
+.att-btn:hover{transform:scale(1.08)}
+.att-btn.sel-p{background:rgba(34,197,94,.18);border-color:#22C55E;color:#22C55E}
+.att-btn.sel-a{background:rgba(239,68,68,.18);border-color:#EF4444;color:#EF4444}
+.att-btn.sel-r{background:rgba(245,158,11,.18);border-color:#F59E0B;color:#F59E0B}
+.att-btn.sel-j{background:rgba(56,189,248,.18);border-color:#38BDF8;color:#38BDF8}
+
+/* Esquema de evaluación */
+.weight-bar{display:flex;height:28px;border-radius:8px;overflow:hidden;background:var(--bg)}
+.weight-seg{display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:#fff;transition:all .3s;min-width:20px;overflow:hidden;white-space:nowrap}
+.cat-card{background:var(--bg);border:2px solid var(--border);border-radius:11px;padding:16px;cursor:pointer;transition:all .2s;position:relative}
+.cat-card:hover{border-color:rgba(255,255,255,.12);transform:translateY(-1px)}
+.cat-card.active{border-color:var(--primary);box-shadow:0 0 0 2px rgba(14,165,115,.2)}
+.act-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid rgba(37,51,71,.4);transition:background .15s;cursor:pointer}
+.act-row:hover{background:rgba(14,165,115,.04)}
+.act-row:last-child{border-bottom:none}
+
+/* Animación */
+.fade-in{animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* Boleta */
+.boleta{background:var(--card);border:2px solid var(--border);border-radius:14px;overflow:hidden;max-width:680px;margin:0 auto}
+.boleta-hdr{background:linear-gradient(135deg,var(--primary),#0a7a58);padding:24px;text-align:center;color:#fff}
+.boleta-body{padding:24px}
+
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .main-header{padding:14px 16px}
+  .main-content{padding:16px 12px}
+  .menu-btn{display:block}
+  .eval-grid{grid-template-columns:1fr!important}
+}
+</style>
+</head>
+<body>
+
+<div class="toast-box" id="toastBox"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="logo">
+    <div style="display:flex;align-items:center;gap:9px">
+      <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;color:#000">C</div>
+      <div><div style="font-weight:700;font-size:1rem">ControlDocente</div><div style="font-size:.68rem;color:var(--muted)">Gestión Académica</div></div>
+    </div>
+  </div>
+  <nav id="sideNav"></nav>
+  <div style="padding:14px 18px;border-top:1px solid var(--border);font-size:.72rem;color:var(--muted);display:flex;align-items:center;gap:5px"><i class="fa-solid fa-database" style="font-size:.65rem"></i> Datos guardados localmente</div>
+</aside>
+
+<div class="main">
+  <header class="main-header">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="fa-solid fa-bars"></i></button>
+      <h1 id="pageTitle" style="font-size:1.15rem;font-weight:700"></h1>
+    </div>
+    <div id="hdrActions" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+  </header>
+  <div class="main-content" id="mc"></div>
+</div>
+
+<div class="modal-overlay" id="mOverlay" onclick="event.target===this&&hideM()"><div class="modal" id="mContent"></div></div>
+
+<script>
+/* ================================================================
+   ESTADO GLOBAL
+================================================================ */
+const CAT_COLORS=['#0EA573','#E8991A','#38BDF8','#EF4444','#A855F7','#EC4899','#14B8A6','#F97316','#6366F1','#84CC16'];
+const NAV=[{id:'dashboard',icon:'fa-chart-line',label:'Dashboard'},{id:'grupos',icon:'fa-layer-group',label:'Grupos'},{id:'alumnos',icon:'fa-user-graduate',label:'Alumnos'},{id:'asistencia',icon:'fa-clipboard-check',label:'Asistencia'},{id:'evaluaciones',icon:'fa-scale-balanced',label:'Evaluaciones'},{id:'reportes',icon:'fa-file-lines',label:'Reportes'}];
+
+let S={groups:[],students:[],attendance:[],activities:[]};
+let curSec='dashboard',selGid=null,selCatId=null,selActId=null,selDate=new Date().toISOString().split('T')[0];
+let evalView='cats'; // cats | acts | grades
+
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+function uid(){return Date.now().toString(36)+Math.random().toString(36).substr(2,6)}
+function gStudents(gid){return S.students.filter(s=>s.groupId===gid).sort((a,b)=>a.name.localeCompare(b.name))}
+function gActs(gid,cid){return cid?S.activities.filter(a=>a.groupId===gid&&a.categoryId===cid):S.activities.filter(a=>a.groupId===gid)}
+function gAtt(gid){return S.attendance.filter(a=>a.groupId===gid).sort((a,b)=>b.date.localeCompare(a.date))}
+function instBadge(i){return i==='universidad'?'<span class="badge badge-uni">Universidad</span>':'<span class="badge badge-cona">CONALEP</span>'}
+function clamp(v,mn,mx){return Math.max(mn,Math.min(mx,v))}
+function round1(v){return Math.round(v*10)/10}
+
+/* ================================================================
+   CÁLCULOS DE CALIFICACIONES
+================================================================ */
+// Promedio de un alumno en una categoría (promedia todas las actividades de esa categoría)
+function catStudentAvg(gid,cid,sid){
+  const acts=gActs(gid,cid);
+  if(!acts.length)return null;
+  let sum=0,cnt=0;
+  acts.forEach(a=>{const g=a.grades.find(x=>x.studentId===sid);if(g&&g.score!==null&&g.score!==undefined){sum+=g.score;cnt++}});
+  return cnt?round1(sum/cnt):null;
+}
+
+// Promedio general de una categoría (promedio de todos los alumnos en esa categoría)
+function catGroupAvg(gid,cid){
+  const studs=gStudents(gid);if(!studs.length)return null;
+  let sum=0,cnt=0;
+  studs.forEach(s=>{const a=catStudentAvg(gid,cid,s.id);if(a!==null){sum+=a;cnt++}});
+  return cnt?round1(sum/cnt):null;
+}
+
+// Calificación final de un alumno (suma ponderada de todas las categorías)
+function finalGrade(gid,sid){
+  const grp=S.groups.find(g=>g.id===gid);
+  if(!grp||!grp.scheme||!grp.scheme.length)return null;
+  let total=0,hasAny=false;
+  grp.scheme.forEach(cat=>{
+    const avg=catStudentAvg(gid,cat.id,sid);
+    if(avg!==null){total+=avg*(cat.weight/100);hasAny=true}
+  });
+  return hasAny?round1(total):null;
+}
+
+// Promedio final del grupo
+function groupFinalAvg(gid){
+  const studs=gStudents(gid);if(!studs.length)return null;
+  let sum=0,cnt=0;
+  studs.forEach(s=>{const f=finalGrade(gid,s.id);if(f!==null){sum+=f;cnt++}});
+  return cnt?round1(sum/cnt):null;
+}
+
+// Estadísticas de asistencia
+function attStats(sid,gid){
+  const recs=gAtt(gid);if(!recs.length)return{total:0,p:0,a:0,r:0,j:0,pct:0};
+  let p=0,a=0,r=0,j=0;
+  recs.forEach(rec=>{const s=rec.records.find(x=>x.studentId===sid);if(s){if(s.status==='P')p++;else if(s.status==='A')a++;else if(s.status==='R')r++;else j++}});
+  const t=recs.length;
+  return{total:t,p,a,r,j,pct:t?Math.round((p+r*.5+j)/t*100):0};
+}
+
+/* ================================================================
+   PERSISTENCIA
+================================================================ */
+function save(){try{localStorage.setItem('cd2',JSON.stringify(S))}catch(e){}}
+function load(){try{const d=localStorage.getItem('cd2');if(d){S=JSON.parse(d);return true}}catch(e){}return false}
+
+/* ================================================================
+   DATOS DE EJEMPLO
+================================================================ */
+function seed(){
+  const g1=uid(),g2=uid(),g3=uid();
+  const sc1=[{id:uid(),name:'Exámenes Parciales',weight:40},{id:uid(),name:'Tareas',weight:20},{id:uid(),name:'Asistencia',weight:10},{id:uid(),name:'Proyecto Integrador',weight:15},{id:uid(),name:'Plataformas',weight:10},{id:uid(),name:'Otros',weight:5}];
+  sc1.forEach((c,i)=>c.color=CAT_COLORS[i]);
+  const sc2=[{id:uid(),name:'Exámenes',weight:35},{id:uid(),name:'Prácticas de Lab',weight:25},{id:uid(),name:'Tareas',weight:15},{id:uid(),name:'Proyecto',weight:15},{id:uid(),name:'Asistencia',weight:10}];
+  sc2.forEach((c,i)=>c.color=CAT_COLORS[i]);
+  const sc3=[{id:uid(),name:'Exámenes',weight:40},{id:uid(),name:'Prácticas Taller',weight:30},{id:uid(),name:'Portafolio',weight:15},{id:uid(),name:'Asistencia',weight:15}];
+  sc3.forEach((c,i)=>c.color=CAT_COLORS[i]);
+
+  S.groups=[
+    {id:g1,name:'Programación Web',subject:'Programación Web',institution:'universidad',cycle:'2025-1',schedule:'Lun-Mié-Vie 8:00-10:00',color:'#0EA573',scheme:sc1},
+    {id:g2,name:'Bases de Datos',subject:'Bases de Datos',institution:'universidad',cycle:'2025-1',schedule:'Mar-Jue 10:00-12:00',color:'#E8991A',scheme:sc2},
+    {id:g3,name:'Prog. Básica',subject:'Programación Básica',institution:'conalep',cycle:'2025-A',schedule:'Lun-Mié 8:00-9:30',color:'#38BDF8',scheme:sc3}
+  ];
+
+  const names=['María García López','Carlos Hernández Ruiz','Ana Patricia Martínez','José Eduardo Sánchez','Sofía Ramírez Torres','Diego Alejandro Flores','Valentina Morales Jiménez','Luis Fernando Castro','Camila Rojas Mendoza','Santiago Vargas Medina','Isabella Reyes Díaz','Mateo Ortiz Guzmán','Fernanda Ríos Peña','Emilio Lara Salinas','Renata Delgado Fuentes'];
+  let si=0;
+  function addS(gid,n){for(let i=0;i<n;i++){S.students.push({id:uid(),groupId:gid,name:names[si%names.length],matricula:String(si+1).padStart(6,'0'),email:'',phone:''});si++}}
+  addS(g1,5);addS(g2,4);addS(g3,5);
+
+  // Asistencia ejemplo
+  ['2025-07-07','2025-07-08','2025-07-09','2025-07-10','2025-07-11'].forEach(d=>{
+    S.groups.forEach(g=>{
+      const studs=gStudents(g.id);
+      S.attendance.push({id:uid(),groupId:g.id,date:d,records:studs.map(s=>({studentId:s.id,status:Math.random()>.15?'P':(Math.random()>.5?'R':'A')}))});
+    });
+  });
+
+  // Actividades ejemplo
+  function addAct(gid,cid,name,date,grades){
+    const studs=gStudents(gid);
+    S.activities.push({id:uid(),groupId:gid,categoryId:cid,name,date,maxScore:10,grades:studs.map((s,i)=>({studentId:s.id,score:grades?grades[i]:round1(5+Math.random()*5)}))});
+  }
+  // Grupo 1
+  addAct(g1,sc1[0].id,'Examen Parcial 1','2025-07-10');
+  addAct(g1,sc1[1].id,'Tarea 1 - HTML','2025-07-05');
+  addAct(g1,sc1[1].id,'Tarea 2 - CSS','2025-07-12');
+  addAct(g1,sc1[2].id,'Asistencia Periodo 1','2025-07-11',gStudents(g1).map(s=>round1(attStats(s.id,g1).pct/10)));
+  addAct(g1,sc1[3].id,'Proyecto - Sitio Web','2025-07-15');
+  addAct(g1,sc1[4].id,'Actividad Platforma 1','2025-07-08');
+  // Grupo 2
+  addAct(g2,sc2[0].id,'Examen Parcial 1','2025-07-11');
+  addAct(g2,sc2[1].id,'Práctica 1 - SQL','2025-07-06');
+  addAct(g2,sc2[1].id,'Práctica 2 - Joins','2025-07-13');
+  addAct(g2,sc2[2].id,'Tarea 1 - Modelo ER','2025-07-09');
+  addAct(g2,sc2[3].id,'Proyecto - Base de Datos','2025-07-16');
+  // Grupo 3
+  addAct(g3,sc3[0].id,'Examen Parcial 1','2025-07-10');
+  addAct(g3,sc3[1].id,'Práctica 1 - PSeInt','2025-07-07');
+  addAct(g3,sc3[1].id,'Práctica 2 - C++ Básico','2025-07-14');
+  addAct(g3,sc3[2].id,'Portafolio Evidencias','2025-07-16');
+
+  save();
+}
+
+/* ================================================================
+   NAVEGACIÓN
+================================================================ */
+function nav(sec){
+  curSec=sec;selCatId=null;selActId=null;evalView='cats';
+  $$('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.s===sec));
+  const t={dashboard:'Dashboard',grupos:'Gestión de Grupos',alumnos:'Alumnos',asistencia:'Asistencia',evaluaciones:'Evaluaciones',reportes:'Reportes'};
+  $('#pageTitle').textContent=t[sec]||'';
+  $('#hdrActions').innerHTML='';
+  render();
+  $('#sidebar').classList.remove('open');
+}
+function renderSideNav(){$('#sideNav').innerHTML=NAV.map(n=>`<div class="nav-item${n.id===curSec?' active':''}" data-s="${n.id}" onclick="nav('${n.id}')"><i class="fa-solid ${n.icon}"></i>${n.label}</div>`).join('')}
+function render(){$('#mc').innerHTML='';$('#mc').className='main-content fade-in';({dashboard:rDash,grupos:rGrupos,alumnos:rAlumnos,asistencia:rAsist,evaluaciones:rEval,reportes:rReport})[curSec]($('#mc'))}
+
+/* ================================================================
+   TOAST Y MODALES
+================================================================ */
+function toast(msg,type='info'){
+  const ic={success:'fa-check-circle',error:'fa-circle-xmark',info:'fa-circle-info'};
+  const el=document.createElement('div');el.className=`toast toast-${type}`;
+  el.innerHTML=`<i class="fa-solid ${ic[type]||ic.info}"></i>${msg}`;
+  $('#toastBox').appendChild(el);
+  setTimeout(()=>{el.style.animation='tOut .3s forwards';setTimeout(()=>el.remove(),300)},2800);
+}
+function showM(html){$('#mContent').innerHTML=html;$('#mOverlay').classList.add('show')}
+function hideM(){$('#mOverlay').classList.remove('show')}
+function confirm(msg,fn){
+  showM(`<div class="modal-head"><h3 style="font-weight:700">Confirmar</h3><button class="btn-icon" onclick="hideM()"><i class="fa-solid fa-xmark"></i></button></div><div class="modal-body"><p style="color:var(--muted);line-height:1.6">${msg}</p></div><div class="modal-foot"><button class="btn btn-ghost" onclick="hideM()">Cancelar</button><button class="btn btn-danger" onclick="hideM();(${fn.toString()})()">Eliminar</button></div>`);
+}
+
+/* ================================================================
+   DASHBOARD
+================================================================ */
+function rDash(c){
+  const tg=S.groups.length,ts=S.students.length;
+  let tPct=0,cPct=0,tAvg=0,cAvg=0;
+  S.groups.forEach(g=>{gStudents(g.id).forEach(s=>{
+    const st=attStats(s.id,g.id);if(st.total>0){tPct+=st.pct;cPct++}
+    const f=finalGrade(g.id,s.id);if(f!==null){tAvg+=f;cAvg++}
+  })});
+  const aAtt=cPct?Math.round(tPct/cPct):0,aGrd=cAvg?round1(tAvg/cAvg):0;
+  let alerts=[];
+  S.groups.forEach(g=>gStudents(g.id).forEach(s=>{
+    const st=attStats(s.id,g.id);if(st.total>=3&&st.pct<70)alerts.push({s,g,t:'asis',v:st.pct});
+    const f=finalGrade(g.id,s.id);if(f!==null&&f<7)alerts.push({s,g,t:'cal',v:f});
+  }));
+
+  c.innerHTML=`
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:24px">
+    ${[{l:'GRUPOS ACTIVOS',v:tg,sub:`${S.groups.filter(g=>g.institution==='universidad').length} UNI · ${S.groups.filter(g=>g.institution==='conalep').length} CONA`,ic:'fa-layer-group',bg:'var(--primary-bg)',cl:'var(--primary)'},
+       {l:'TOTAL ALUMNOS',v:ts,sub:`Promedio ${tg?Math.round(ts/tg):0}/grupo`,ic:'fa-user-graduate',bg:'var(--accent-bg)',cl:'var(--accent)'},
+       {l:'ASISTENCIA PROM.',v:aAtt+'%',sub:'',ic:'fa-clipboard-check',bg:'rgba(34,197,94,.1)',cl:aAtt>=80?'var(--success)':aAtt>=60?'var(--warning)':'var(--danger)',bar:aAtt,barCl:aAtt>=80?'var(--success)':aAtt>=60?'var(--warning)':'var(--danger)'},
+       {l:'CALIFICACIÓN PROM.',v:aGrd,sub:'',ic:'fa-scale-balanced',bg:'rgba(56,189,248,.1)',cl:aGrd>=8?'var(--success)':aGrd>=7?'var(--warning)':'var(--danger)',bar:aGrd*10,barCl:aGrd>=8?'var(--success)':aGrd>=7?'var(--warning)':'var(--danger)'}
+    ].map(x=>`<div class="stat-card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><span style="font-size:.78rem;color:var(--muted);font-weight:600">${x.l}</span><div style="width:34px;height:34px;border-radius:8px;background:${x.bg};display:flex;align-items:center;justify-content:center"><i class="fa-solid ${x.ic}" style="color:${x.cl};font-size:.85rem"></i></div></div><div class="num" style="font-size:1.9rem;font-weight:700;color:${x.cl}">${x.v}</div>${x.sub?`<div style="font-size:.75rem;color:var(--muted);margin-top:3px">${x.sub}</div>`:''}${x.bar!==undefined?`<div class="progress" style="margin-top:8px"><div class="progress-fill" style="width:${x.bar}%;background:${x.barCl}"></div></div>`:''}</div>`).join('')}
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" class="eval-grid">
+    <div class="data-card"><div style="padding:16px 18px;border-bottom:1px solid var(--border)"><h3 style="font-weight:700;font-size:.92rem">Mis Grupos</h3></div>
+    <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Grupo</th><th>Inst.</th><th>Alum.</th><th>Prom.</th></tr></thead><tbody>
+    ${S.groups.map(g=>{const fa=groupFinalAvg(g.id);return`<tr><td><div style="display:flex;align-items:center;gap:7px"><div style="width:8px;height:8px;border-radius:50%;background:${g.color}"></div><span style="font-weight:600">${g.name}</span></div></td><td>${instBadge(g.institution)}</td><td class="num">${gStudents(g.id).length}</td><td class="num" style="font-weight:600;color:${fa&&fa>=8?'var(--success)':fa&&fa>=7?'var(--warning)':fa?'var(--danger)':'var(--muted)'}">${fa||'-'}</td></tr>`}).join('')}
+    </tbody></table></div></div>
+    <div class="data-card"><div style="padding:16px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center"><h3 style="font-weight:700;font-size:.92rem"><i class="fa-solid fa-triangle-exclamation" style="color:var(--warning);margin-right:5px"></i>Alertas</h3><span class="num" style="font-size:.78rem;color:var(--muted)">${alerts.length}</span></div>
+    <div style="padding:10px;max-height:320px;overflow-y:auto">
+    ${alerts.length?alerts.slice(0,12).map(a=>`<div style="padding:9px 11px;border-radius:7px;background:var(--bg);margin-bottom:5px;display:flex;align-items:center;justify-content:space-between;gap:8px"><div style="min-width:0"><div style="font-size:.83rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.s.name}</div><div style="font-size:.72rem;color:var(--muted)">${a.g.name}</div></div><span class="badge" style="background:${a.t==='asis'?(a.v<60?'var(--danger-bg)':'var(--accent-bg)'):'var(--accent-bg)'};color:${a.t==='asis'?(a.v<60?'var(--danger)':'var(--warning)'):'var(--warning)'}">${a.t==='asis'?'Asist. '+a.v+'%':'Prom. '+a.v}</span></div>`).join(''):'<div style="text-align:center;padding:36px;color:var(--muted)"><i class="fa-solid fa-check-circle" style="font-size:1.8rem;display:block;margin-bottom:8px;color:var(--success)"></i>Sin alertas</div>'}
+    </div></div>
+  </div>`;
+}
+
+/* ================================================================
+   GRUPOS
+================================================================ */
+function rGrupos(c){
+  $('#hdrActions').innerHTML=`<button class="btn btn-primary" onclick="mGroup()"><i class="fa-solid fa-plus"></i> Nuevo Grupo</button>`;
+  c.innerHTML=`<div style="display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap">
+    <button class="btn btn-sm btn-ghost gf active" data-f="todos" onclick="fGrupos('todos',this)" style="border-color:var(--primary);color:var(--primary)">Todos</button>
+    <button class="btn btn-sm btn-ghost gf" data-f="universidad" onclick="fGrupos('universidad',this)">Universidad</button>
+    <button class="btn btn-sm btn-ghost gf" data-f="conalep" onclick="fGrupos('conalep',this)">CONALEP</button>
+  </div><div class="data-card" id="gTbl"></div>`;
+  fGrupos('todos',$('.gf'));
+}
+function fGrupos(f,btn){
+  $$('.gf').forEach(b=>{b.classList.remove('active');b.style.borderColor='';b.style.color=''});
+  btn.classList.add('active');btn.style.borderColor='var(--primary)';btn.style.color='var(--primary)';
+  const gs=f==='todos'?S.groups:S.groups.filter(g=>g.institution===f);
+  $('#gTbl').innerHTML=gs.length?`<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Grupo</th><th>Materia</th><th>Inst.</th><th>Ciclo</th><th>Horario</th><th>Alum.</th><th>Esquema</th><th style="text-align:right">Acc.</th></tr></thead><tbody>${gs.map(g=>`<tr>
+    <td><div style="display:flex;align-items:center;gap:8px"><div style="width:9px;height:9px;border-radius:50%;background:${g.color}"></div><span style="font-weight:600">${g.name}</span></div></td>
+    <td style="color:var(--muted)">${g.subject}</td><td>${instBadge(g.institution)}</td><td class="num" style="font-size:.83rem">${g.cycle}</td><td style="font-size:.83rem;color:var(--muted)">${g.schedule}</td>
+    <td class="num">${gStudents(g.id).length}</td>
+    <td>${g.scheme&&g.scheme.length?`<span class="num" style="font-size:.82rem;color:${g.scheme.reduce((s,c)=>s+c.weight,0)===100?'var(--success)':'var(--warning)'}">${g.scheme.reduce((s,c)=>s+c.weight,0)}%</span>`:'<span style="font-size:.78rem;color:var(--danger)">Sin esquema</span>'}</td>
+    <td style="text-align:right;white-space:nowrap"><button class="btn-icon" onclick="mScheme('${g.id}')" title="Esquema de evaluación"><i class="fa-solid fa-sliders"></i></button><button class="btn-icon" onclick="mGroup('${g.id}')" title="Editar"><i class="fa-solid fa-pen"></i></button><button class="btn-icon" onclick="delGroup('${g.id}')" title="Eliminar" style="color:var(--danger);border-color:rgba(239,68,68,.15)"><i class="fa-solid fa-trash"></i></button></td>
+  </tr>`).join('')}</tbody></table></div>`:'<div style="text-align:center;padding:50px;color:var(--muted)"><i class="fa-solid fa-folder-open" style="font-size:2rem;display:block;margin-bottom:10px"></i>Sin grupos</div>';
+}
+function mGroup(eid){
+  const g=eid?S.groups.find(x=>x.id===eid):null;
+  showM(`<div class="modal-head"><h3 style="font-weight:700">${g?'Editar':'Nuevo'} Grupo</h3><button class="btn-icon" onclick="hideM()"><i class="fa-solid fa-xmark"></i></button></div>
+  <div class="modal-body"><div style="display:grid;gap:12px">
+    <div><label>Nombre</label><input class="input" id="fGN" value="${g?g.name:''}" placeholder="Prog. Web - A"></div>
+    <div><label>Materia</label><input class="input" id="fGS" value="${g?g.subject:''}" placeholder="Programación Web"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div><label>Institución</label><select class="input" id="fGI"><option value="universidad" ${g&&g.institution==='universidad'?'selected':''}>Universidad</option><option value="conalep" ${g&&g.institution==='conalep'?'selected':''}>CONALEP</option></select></div>
+      <div><label>Ciclo</label><input class="input" id="fGC" value="${g?g.cycle:'2025-1'}"></div>
+    </div>
+    <div><label>Horario</label><input class="input" id="fGH" value="${g?g.schedule:''}" placeholder="Lun-Mié 8:00-10:00"></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-ghost" onclick="hideM()">Cancelar</button><button class="btn btn-primary" onclick="sGroup('${eid||''}')">${g?'Guardar':'Crear'}</button></div>`);
+}
+function sGroup(eid){
+  const n=$('#fGN').value.trim(),s=$('#fGS').value.trim(),i=$('#fGI').value,cy=$('#fGC').value.trim(),h=$('#fGH').value.trim();
+  if(!n){toast('Ingresa nombre','error');return}
+  if(eid){const g=S.groups.find(x=>x.id===eid);if(g)Object.assign(g,{name:n,subject:s,institution:i,cycle:cy,schedule:h});toast('Grupo actualizado','success')}
+  else{S.groups.push({id:uid(),name:n,subject:s,institution:i,cycle:cy,schedule:h,color:CAT_COLORS[S.groups.length%CAT_COLORS.length],scheme:[]});toast('Grupo creado','success')}
+  save();hideM();render();
+}
+function delGroup(id){const g=S.groups.find(x=>x.id===id);if(!g)return;confirm(`Eliminar "${g.name}" y todos sus datos?`,()=>{S.groups=S.groups.filter(x=>x.id!==id);S.students=S.students.filter(x=>x.groupId!==id);S.attendance=S.attendance.filter(x=>x.groupId!==id);S.activities=S.activities.filter(x=>x.groupId!==id);save();toast('Eliminado','info');render()})}
+
+/* ================================================================
+   ESQUEMA DE EVALUACIÓN (CATEGORÍAS CON PONDERACIÓN)
+================================================================ */
+function mScheme(gid){
+  const g=S.groups.find(x=>x.id===gid);if(!g)return;
+  if(!g.scheme)g.scheme=[];
+  renderSchemeModal(g);
+}
+function renderSchemeModal(g){
+  const tw=g.scheme.reduce((s,c)=>s+c.weight,0);
+  const ok=tw===100;
+  let h=`<div class="modal-head"><h3 style="font-weight:700">Esquema de Evaluación</h3><button class="btn-icon" onclick="hideM()"><i class="fa-solid fa-xmark"></i></button></div>
+  <div class="modal-body">
+    <div style="margin-bottom:16px;padding:10px 14px;border-radius:8px;background:${ok?'rgba(34,197,94,.08)':'rgba(245,158,11,.08)'};border:1px solid ${ok?'rgba(34,197,94,.2)':'rgba(245,158,11,.2)'};display:flex;align-items:center;justify-content:space-between">
+      <span style="font-size:.84rem;color:${ok?'var(--success)':'var(--warning)'};font-weight:600"><i class="fa-solid ${ok?'fa-check-circle':'fa-triangle-exclamation'}" style="margin-right:5px"></i>Ponderación total: <span class="num">${tw}%</span></span>
+      ${ok?'<span style="font-size:.78rem;color:var(--success)">Correcto</span>':'<span style="font-size:.78rem;color:var(--warning)">Debe ser 100%</span>'}
+    </div>
+    <!-- Barra visual de distribución -->
+    <div class="weight-bar" style="margin-bottom:18px">${g.scheme.map(c=>`<div class="weight-seg" style="width:${c.weight}%;background:${c.color||'var(--border)'}" title="${c.name}: ${c.weight}%">${c.weight>=8?c.weight+'%':''}</div>`).join('')}${tw<100?`<div style="flex:1;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.7rem">${100-tw}% libre</div>`:''}</div>
+    <div id="schemeCats" style="display:grid;gap:8px;margin-bottom:14px">
+    ${g.scheme.map((c,i)=>`<div style="display:grid;grid-template-columns:12px 1fr 80px 34px;gap:8px;align-items:center">
+      <div style="width:12px;height:12px;border-radius:3px;background:${c.color||CAT_COLORS[i%CAT_COLORS.length]}"></div>
+      <input class="input" value="${c.name}" onchange="updSchemeCat('${g.id}',${i},'name',this.value)" placeholder="Nombre categoría" style="font-size:.85rem">
+      <div style="position:relative"><input type="number" class="input num" value="${c.weight}" min="0" max="100" onchange="updSchemeCat('${g.id}',${i},'weight',+this.value)" style="padding-right:24px;font-size:.85rem"><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.8rem">%</span></div>
+      <button class="btn-icon" onclick="delSchemeCat('${g.id}',${i})" style="color:var(--danger);border-color:rgba(239,68,68,.15)"><i class="fa-solid fa-trash" style="font-size:.75rem"></i></button>
+    </div>`).join('')}
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="addSchemeCat('${g.id}')" style="width:100%"><i class="fa-solid fa-plus"></i> Agregar Categoría</button>
+  </div>
+  <div class="modal-foot"><button class="btn btn-ghost" onclick="hideM()">Cancelar</button><button class="btn btn-primary" onclick="saveScheme('${g.id}')"><i class="fa-solid fa-check"></i> Guardar Esquema</button></div>`;
+  showM(h);
+}
+function addSchemeCat(gid){
+  const g=S.groups.find(x=>x.id===gid);if(!g)return;
+  if(!g.scheme)g.scheme=[];
+  if(g.scheme.length>=10){toast('Máximo 10 categorías','error');return}
+  g.scheme.push({id:uid(),name:'',weight:0,color:CAT_COLORS[g.scheme.length%CAT_COLORS.length]});
+  renderSchemeModal(g);
+}
+function updSchemeCat(gid,idx,field,val){
+  const g=S.groups.find(x=>x.id===gid);if(!g||!g.scheme[idx])return;
+  g.scheme[idx][field]=field==='weight'?clamp(val,0,100):val;
+  // Actualizar barra visual sin re-render completo
+  const bar=$('.weight-bar');
+  const tw=g.scheme.reduce((s,c)=>s+c.weight,0);
+  if(bar){
+    bar.innerHTML=g.scheme.map((c,i)=>`<div class="weight-seg" style="width:${c.weight}%;background:${c.color||'var(--border)'}" title="${c.name}: ${c.weight}%">${c.weight>=8?c.weight+'%':''}</div>`).join('')+(tw<100?`<div style="flex:1;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.7rem">${100-tw}% libre</div>`:'');
+  }
+  // Actualizar indicador de total
+  const ok=tw===100;
+  const ind=$('.modal-body > div:first-child');
+  if(ind){
+    ind.style.background=ok?'rgba(34,197,94,.08)':'rgba(245,158,11,.08)';
+    ind.style.borderColor=ok?'rgba(34,197,94,.2)':'rgba(245,158,11,.2)';
+    ind.innerHTML=`<span style="font-size:.84rem;color:${ok?'var(--success)':'var(--warning)'};font-weight:600"><i class="fa-solid ${ok?'fa-check-circle':'fa-triangle-exclamation'}" style="margin-right:5px"></i>Ponderación total: <span class="num">${tw}%</span></span>${ok?'<span style="font-size:.78rem;color:var(--success)">Correcto</span>':'<span style="font-size:.78rem;color:var(--warning)">Debe ser 100%</span>'}`;
+  }
+}
+function delSchemeCat(gid,idx){
+  const g=S.groups.find(x=>x.id===gid);if(!g||!g.scheme[idx])return;
+  const cat=g.scheme[idx];
+  // Verificar si hay actividades en esta categoría
+  const acts=gActs(gid,cat.id);
+  if(acts.length){
+    confirm(`Esta categoría tiene ${acts.length} actividad(es). Se eliminarán todas.`,()=>{
+      g.scheme.splice(idx,1);
+      S.activities=S.activities.filter(a=>!(a.groupId===gid&&a.categoryId===cat.id));
+      renderSchemeModal(g);
+    });
+  }else{
+    g.scheme.splice(idx,1);
+    renderSchemeModal(g);
+  }
+}
+function saveScheme(gid){
+  const g=S.groups.find(x=>x.id===gid);if(!g)return;
+  // Validar
+  if(!g.scheme.length){toast('Agrega al menos una categoría','error');return}
+  const tw=g.scheme.reduce((s,c)=>s+c.weight,0);
+  if(tw!==100){toast(`La ponderación total es ${tw}%, debe ser exactamente 100%`,'error');return}
+  for(const c of g.scheme){if(!c.name.trim()){toast('Todas las categorías deben tener nombre','error');return}}
+  save();hideM();toast('Esquema guardado','success');render();
+}
+
+/* ================================================================
+   ALUMNOS
+================================================================ */
+function rAlumnos(c){
+  if(!selGid&&S.groups.length)selGid=S.groups[0].id;
+  $('#hdrActions').innerHTML=`<button class="btn btn-primary" onclick="mStudent()"><i class="fa-solid fa-user-plus"></i> Nuevo Alumno</button>`;
+  c.innerHTML=`<div style="margin-bottom:18px;max-width:380px"><label>Grupo</label><select class="input" onchange="selGid=this.value;rAlumTbl()"><option value="">-- Selecciona --</option>${S.groups.map(g=>`<option value="${g.id}" ${g.id===selGid?'selected':''}>${g.name}</option>`).join('')}</select></div><div class="data-card" id="sTbl"></div>`;
+  rAlumTbl();
+}
+function rAlumTbl(){
+  const el=$('#sTbl');if(!el)return;
+  if(!selGid){el.innerHTML='<div style="text-align:center;padding:50px;color:var(--muted)"><i class="fa-solid fa-arrow-up" style="display:block;font-size:1.3rem;margin-bottom:8px"></i>Selecciona un grupo</div>';return}
+  const studs=gStudents(selGid),g=S.groups.find(x=>x.id===selGid);
+  el.innerHTML=studs.length?`<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Matrícula</th><th>Nombre</th><th>Asist. %</th><th>Prom. Final</th><th style="text-align:right">Acc.</th></tr></thead><tbody>${studs.map(s=>{
+    const at=attStats(s.id,selGid),f=finalGrade(selGid,s.id);
+    return`<tr><td class="num" style="color:var(--muted);font-size:.82rem">${s.matricula}</td><td style="font-weight:600">${s.name}</td>
+    <td><div style="display:flex;align-items:center;gap:6px"><div class="progress" style="width:70px"><div class="progress-fill" style="width:${at.pct}%;background:${at.pct>=80?'var(--success)':at.pct>=60?'var(--warning)':'var(--danger)'}"></div></div><span class="num" style="font-size:.8rem">${at.total?at.pct+'%':'-'}</span></div></td>
+    <td class="num" style="font-weight:700;color:${f&&f>=8?'var(--success)':f&&f>=7?'var(--warning)':f?'var(--danger)':'var(--muted)'}">${f||'-'}</td>
+    <td style="text-align:right;white-space:nowrap"><button class="btn-icon" onclick="mStudent('${s.id}')" title="Editar"><i class="fa-solid fa-pen" style="font-size:.8rem"></i></button><button class="btn-icon" onclick="delStudent('${s.id}')" title="Eliminar" style="color:var(--danger);border-color:rgba(239,68,68,.15)"><i class="fa-solid fa-trash" style="font-size:.8rem"></i></button></td></tr>`}).join('')}</tbody></table></div>`
+  :'<div style="text-align:center;padding:50px;color:var(--muted)"><i class="fa-solid fa-user-group" style="font-size:2rem;display:block;margin-bottom:10px"></i>Sin alumnos</div>';
+}
+function mStudent(eid){
+  if(!selGid&&S.groups.length)selGid=S.groups[0].id;
+  const s=eid?S.students.find(x=>x.id===eid):null;
+  showM(`<div class="modal-head"><h3 style="font-weight:700">${s?'Editar':'Nuevo'} Alumno</h3><button class="btn-icon" onclick="hideM()"><i class="fa-solid fa-xmark"></i></button></div>
+  <div class="modal-body"><div style="display:grid;gap:12px">
+    <div><label>Grupo</label><select class="input" id="fSG">${S.groups.map(g=>`<option value="${g.id}" ${g.id===(s?s.groupId:selGid)?'selected':''}>${g.name}</option>`).join('')}</select></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label>Matrícula</label><input class="input" id="fSM" value="${s?s.matricula:''}" placeholder="001234"></div><div><label>Nombre</label><input class="input" id="fSN" value="${s?s.name:''}" placeholder="Nombre completo"></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label>Correo</label><input class="input" id="fSE" value="${s?s.email:''}" placeholder="opcional"></div><div><label>Teléfono</label><input class="input" id="fSP" value="${s?s.phone:''}" placeholder="opcional"></div></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-ghost" onclick="hideM()">Cancelar</button><button class="btn btn-primary" onclick="sStudent('${eid||''}')">${s?'Guardar':'Agregar'}</button></div>`);
+}
+function sStudent(eid){
+  const gid=$('#fSG').value,m=$('#fSM').value.trim(),n=$('#fSN').value.trim(),e=$('#fSE').value.trim(),p=$('#fSP').value.trim();
+  if(!n){toast('Ingresa nombre','error');return}
+  if(eid){const s=S.students.find(x=>x.id===eid);if(s)Object.assign(s,{groupId:gid,matricula:m,name:n,email:e,phone:p});toast('Actualizado','success')}
+  else{S.students.push({id:uid(),groupId:gid,matricula:m,name:n,email:e,phone:p});toast('Agregado','success')}
+  save();hideM();render();
+}
+function delStudent(id){const s=S.students.find(x=>x.id===id);if(!s)return;confirm(`Eliminar a "${s.name}"?`,()=>{S.students=S.students.filter(x=>x.id!==id);S.attendance.forEach(a=>{a.records=a.records.filter(r=>r.studentId!==id)});S.activities.forEach(a=>{a.grades=a.grades.filter(g=>g.studentId!==id)});save();toast('Eliminado','info');render()})}
+
+/* ================================================================
+   ASISTENCIA
+================================================================ */
+function rAsist(c){
+  if(!selGid&&S.groups.length)selGid=S.groups[0].id;
+  c.innerHTML=`<div style="display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin-bottom:18px">
+    <div style="min-width:200px"><label>Grupo</label><select class="input" id="aGrp" onchange="selGid=this.value;selDate='${new Date().toISOString().split('T')[0]}';$('#aDate').value=selDate;rAtt()">${S.groups.map(g=>`<option value="${g.id}" ${g.id===selGid?'selected':''}>${g.name}</option>`).join('')}</select></div>
+    <div style="min-width:160px"><label>Fecha</label><input type="date" class="input" id="aDate" value="${selDate}" onchange="selDate=this.value;rAtt()"></div>
+    <button class="btn btn-primary" onclick="sAtt()"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+  </div><div id="aDates" style="margin-bottom:14px"></div><div class="data-card" id="aCont"></div>`;
+  rAtt();
+}
+function rAtt(){
+  if(!selGid){$('#aCont').innerHTML='<div style="text-align:center;padding:50px;color:var(--muted)">Selecciona grupo</div>';return}
+  const studs=gStudents(selGid);
+  if(!studs.length){$('#aCont').innerHTML='<div style="text-align:center;padding:50px;color:var(--muted)">Sin alumnos</div>';return}
+  const dates=gAtt(selGid).map(a=>a.date);
+  $('#aDates').innerHTML=dates.length?`<div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center"><span style="font-size:.75rem;color:var(--muted);margin-right:3px">Registradas:</span>${dates.map(d=>`<span style="font-size:.72rem;padding:2px 7px;border-radius:5px;background:var(--card);border:1px solid var(--border);cursor:pointer;color:${d===selDate?'var(--primary)':'var(--muted)'}" onclick="selDate='${d}';$('#aDate').value='${d}';rAtt()">${d.slice(5)}</span>`).join('')}</div>`:'';
+  let rec=S.attendance.find(a=>a.groupId===selGid&&a.date===selDate);
+  if(!rec){rec={id:uid(),groupId:selGid,date:selDate,records:studs.map(s=>({studentId:s.id,status:'P'}))}}
+  else{studs.forEach(s=>{if(!rec.records.find(r=>r.studentId===s.id))rec.records.push({studentId:s.id,status:'P'})})}
+  window._tA=rec;
+  const cn={P:0,A:0,R:0,J:0};rec.records.forEach(r=>{if(cn.hasOwnProperty(r.status))cn[r.status]++});
+  $('#aCont').innerHTML=`<div style="padding:12px 18px;border-bottom:1px solid var(--border);display:flex;gap:14px;flex-wrap:wrap">
+    <span class="badge" style="background:rgba(34,197,94,.12);color:#22C55E"><i class="fa-solid fa-check" style="font-size:.6rem"></i> P: ${cn.P}</span>
+    <span class="badge" style="background:var(--danger-bg);color:var(--danger)"><i class="fa-solid fa-xmark" style="font-size:.6rem"></i> A: ${cn.A}</span>
+    <span class="badge" style="background:var(--accent-bg);color:var(--warning)"><i class="fa-solid fa-clock" style="font-size:.6rem"></i> R: ${cn.R}</span>
+    <span class="badge" style="background:rgba(56,189,248,.12);color:var(--info)"><i class="fa-solid fa-file-medical" style="font-size:.6rem"></i> J: ${cn.J}</span>
+  </div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th style="width:36px">#</th><th>Matr.</th><th>Nombre</th><th style="text-align:center">P</th><th style="text-align:center">A</th><th style="text-align:center">R</th><th style="text-align:center">J</th></tr></thead><tbody>${rec.records.map((r,i)=>{const s=studs.find(x=>x.id===r.studentId);if(!s)return'';return`<tr><td class="num" style="color:var(--muted);font-size:.78rem">${i+1}</td><td class="num" style="color:var(--muted);font-size:.82rem">${s.matricula}</td><td style="font-weight:500">${s.name}</td>${['P','A','R','J'].map(st=>`<td style="text-align:center"><button class="att-btn ${r.status===st?'sel-'+st.toLowerCase():''}" onclick="window._tA.records[${i}].status='${st}';rAtt()">${st}</button></td>`).join('')}</tr>`}).join('')}</tbody></table></div>`;
+}
+function sAtt(){
+  if(!window._tA){toast('Sin datos','error');return}
+  const r=window._tA,ex=S.attendance.findIndex(a=>a.groupId===r.groupId&&a.date===r.date);
+  if(ex>=0)S.attendance[ex]=r;else S.attendance.push(r);
+  save();toast('Asistencia guardada','success');rAtt();
+}
+
+/* ================================================================
+   EVALUACIONES — SISTEMA COMPLETO CON CATEGORÍAS Y ACTIVIDADES
+================================================================ */
+function rEval(c){
+  if(!selGid&&S.groups.length)selGid=S.groups[0].id;
+  $('#hdrActions').innerHTML=`<button class="btn btn-ghost" onclick="mScheme(selGid)" style="margin-right:4px"><i class="fa-solid fa-sliders"></i> Esquema</button>`;
+  c.innerHTML=`<div style="margin-bottom:18px;max-width:380px"><label>Grupo</label><select class="input" id="eGrp" onchange="selGid=this.value;selCatId=null;selActId=null;evalView='cats';rEvalBody()">${S.groups.map(g=>`<option value="${g.id}" ${g.id===selGid?'selected':''}>${g.name}</option>`).join('')}</select></div><div id="eBody"></div>`;
+  rEvalBody();
+}
+
+function rEvalBody(){
+  const el=$('#eBody');if(!el)return;
+  if(!selGid){el.innerHTML='<div style="text-align:center;padding:50px;color:var(--muted)">Selecciona grupo</div>';return}
+  const g=S.groups.find(x=>x.id===selGid);
+  if(!g||!g.scheme||!g.scheme.length){
+    el.innerHTML=`<div style="text-align:center;padding:50px;color:var(--muted);max-width:420px;margin:0 auto">
+      <i class="fa-solid fa-sliders" style="font-size:2.5rem;display:block;margin-bottom:14px;color:var(--warning)"></i>
+      <h3 style="font-weight:700;margin-bottom:8px;color:var(--text)">Sin esquema de evaluación</h3>
+      <p style="font-size:.88rem;margin-bottom:18px;line-height:1.5">Configura las categorías de evaluación con su ponderación para este grupo (debe sumar 100%).</p>
+      <button class="btn btn-primary" onclick="mScheme('${selGid}')"><i class="fa-solid fa-plus"></i> Configurar Esquema</button>
+    </div>`;return;
+  }
+
+  const tw=g.scheme.reduce((s,c)=>s+c.weight,0);
+  const studs=gStudents(selGid);
+
+  if(evalView==='cats') rEvalCats(el,g,studs,tw);
+  else if(evalView==='acts') rEvalActs(el,g,studs);
+  else if(evalView==='grades') rEvalGrades(el,g,studs);
+}
+
+// === VISTA DE CATEGORÍAS ===
+function rEvalCats(el,g,studs,tw){
+  const ok=tw===100;
+  el.innerHTML=`
+  ${!ok?`<div style="padding:10px 14px;border-radius:8px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.15);margin-bottom:16px;font-size:.84rem;color:var(--warning);display:flex;align-items:center;gap:8px"><i class="fa-solid fa-triangle-exclamation"></i>La ponderación suma ${tw}% (debe ser 100%). <button class="btn btn-sm btn-ghost" onclick="mScheme('${g.id}')" style="margin-left:auto">Corregir</button></div>`:''}
+  <!-- Barra de distribución -->
+  <div class="weight-bar" style="margin-bottom:20px">${g.scheme.map(c=>`<div class="weight-seg" style="width:${c.weight}%;background:${c.color}" title="${c.name}: ${c.weight}%">${c.weight>=10?c.weight+'%':''}</div>`).join('')}</div>
+  <!-- Grid de categorías -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-bottom:24px">
+  ${g.scheme.map((cat,i)=>{
+    const acts=gActs(g.id,cat.id);
+    const avg=catGroupAvg(g.id,cat.id);
+    const graded=studs.filter(s=>catStudentAvg(g.id,cat.id,s.id)!==null).length;
+    return`<div class="cat-card ${selCatId===cat.id?'active':''}" onclick="selCatId='${cat.id}';evalView='acts';rEvalBody()">
+      <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:3px;background:${cat.color}"></div><span style="font-size:.72rem;color:var(--muted);font-weight:600">${cat.weight}%</span></div>
+        <span class="num" style="font-size:1.4rem;font-weight:800;color:${avg&&avg>=8?'var(--success)':avg&&avg>=7?'var(--warning)':avg?'var(--danger)':'var(--muted)'}">${avg||'-'}</span>
+      </div>
+      <h4 style="font-weight:700;font-size:.92rem;margin-bottom:8px">${cat.name}</h4>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.78rem;color:var(--muted)">${acts.length} actividad${acts.length!==1?'es':''} · ${graded}/${studs.length} calif.</span>
+      </div>
+      <div class="progress" style="margin-top:10px"><div class="progress-fill" style="width:${avg?avg*10:0}%;background:${cat.color}"></div></div>
+    </div>`}).join('')}
+  </div>
+  <!-- Resumen de calificaciones finales -->
+  ${rFinalTable(g,studs)}`;
+}
+
+// === VISTA DE ACTIVIDADES DE UNA CATEGORÍA ===
+function rEvalActs(el,g,studs){
+  const cat=g.scheme.find(c=>c.id===selCatId);
+  if(!cat){evalView='cats';rEvalBody();return}
+  const acts=gActs(g.id,cat.id);
+  const catAvg=catGroupAvg(g.id,cat.id);
+
+  el.innerHTML=`
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap">
+    <button class="btn btn-ghost btn-sm" onclick="evalView='cats';selCatId=null;rEvalBody()"><i class="fa-solid fa-arrow-left"></i> Categorías</button>
+    <div style="display:flex;align-items:center;gap:8px"><div style="width:12px;height:12px;border-radius:3px;background:${cat.color}"></div><h3 style="font-weight:700;font-size:1.05rem">${cat.name}</h3><span class="badge" style="background:${cat.color}22;color:${cat.color}">${cat.weight}%</span><span class="num" style="font-size:.88rem;color:var(--muted)">Prom: <strong style="color:${catAvg&&catAvg>=8?'var(--success)':catAvg&&catAvg>=7?'var(--warning)':catAvg?'var(--danger)':'var(--muted)'}">${catAvg||'-'}</strong></span></div>
+    <button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="mActivity()"><i class="fa-solid fa-plus"></i> Nueva Actividad</button>
+  </div>
+  ${acts.length?`<div class="data-card">
+    <div style="padding:12px 18px;border-bottom:1px solid var(--border);font-size:.82rem;color:var(--muted)">${acts.length} actividad${acts.length!==1?'es':''} registradas</div>
+    ${acts.sort((a,b)=>b.date.localeCompare(a.date)).map(a=>{
+      const graded=a.grades.filter(x=>x.score!==null&&x.score!==undefined).length;
+      const avg=graded?a.grades.filter(x=>x.score!==null&&x.score!==undefined).reduce((s,x)=>s+x.score,0)/graded:0;
+      return`<div class="act-row" onclick="selActId='${a.id}';evalView='grades';rEvalBody()">
+        <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.name}</div><div style="font-size:.78rem;color:var(--muted);margin-top:2px"><i class="fa-regular fa-calendar" style="margin-right:4px"></i>${a.date} · ${graded}/${studs.length} calificados</div></div>
+        <span class="num" style="font-size:1.1rem;font-weight:700;color:${avg>=8?'var(--success)':avg>=7?'var(--warning)':'var(--danger)'};min-width:40px;text-align:right">${graded?round1(avg):'-'}</span>
+        <button class="btn-icon" onclick="event.stopPropagation();mActivity('${a.id}')" title="Editar"><i class="fa-solid fa-pen" style="font-size:.75rem"></i></button>
+        <button class="btn-icon" onclick="event.stopPropagation();delActivity('${a.id}')" title="Eliminar" style="color:var(--danger);border-color:rgba(239,68,68,.15)"><i class="fa-solid fa-trash" style="font-size:.75rem"></i></button>
+      </div>`}).join('')}
+  </div>`:`<div style="text-align:center;padding:50px;color:var(--muted)"><i class="fa-solid fa-clipboard-list" style="font-size:2rem;display:block;margin-bottom:12px"></i>Sin actividades en esta categoría</div>`}
+  <div style="margin-top:20px">${rFinalTable(g,studs)}</div>`;
+}
+
+// === VISTA DE CALIFICACIONES DE UNA ACTIVIDAD ===
+function rEvalGrades(el,g,studs){
+  const act=S.activities.find(a=>a.id===selActId);
+  if(!act){evalView='acts';rEvalBody();return}
+  const cat=g.scheme.find(c=>c.id===act.categoryId);
+  const graded=act.grades.filter(x=>x.score!==null&&x.score!==undefined);
+  const avg=graded.length?round1(graded.reduce((s,x)=>s+x.score,0)/graded.length):0;
+
+  el.innerHTML=`
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap">
+    <button class="btn btn-ghost btn-sm" onclick="evalView='acts';selActId=null;rEvalBody()"><i class="fa-solid fa-arrow-left"></i> Actividades</button>
+    <div style="flex:1;min-width:0">
+      <div style="font-weight:700;font-size:1.05rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${act.name}</div>
+      <div style="font-size:.8rem;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;margin-top:2px">
+        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${cat?cat.color:'#666'};margin-right:4px"></span>${cat?cat.name:''}</span>
+        <span><i class="fa-regular fa-calendar" style="margin-right:3px"></i>${act.date}</span>
+        <span>Promedio: <strong class="num" style="color:${avg>=8?'var(--success)':avg>=7?'var(--warning)':avg?'var(--danger)':'var(--muted)'}">${avg||'-'}</strong></span>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="sGrades()"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+  </div>
+  <div class="data-card">
+    <div style="padding:10px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:.82rem;color:var(--muted)">${graded.length}/${studs.length} calificados</span>
+      ${cat&&cat.name.toLowerCase().includes('asist')?`<button class="btn btn-ghost btn-sm" onclick="autoFillAtt()"><i class="fa-solid fa-wand-magic-sparkles"></i> Llenar desde asistencia</button>`:''}
+    </div>
+    <div style="overflow-x:auto"><table class="tbl"><thead><tr><th style="width:36px">#</th><th>Matrícula</th><th>Nombre</th><th style="text-align:center">Prom. Categoría</th><th style="text-align:center">Calificación (0-10)</th></tr></thead>
+    <tbody>${studs.map((s,i)=>{
+      const gr=act.grades.find(x=>x.studentId===s.id);
+      const val=gr&&gr.score!==null&&gr.score!==undefined?gr.score:'';
+      const cAvg=catStudentAvg(g.id,act.categoryId,s.id);
+      return`<tr><td class="num" style="color:var(--muted);font-size:.78rem">${i+1}</td><td class="num" style="color:var(--muted);font-size:.82rem">${s.matricula}</td><td style="font-weight:500">${s.name}</td>
+      <td class="num" style="text-align:center;font-size:.85rem;color:${cAvg&&cAvg>=8?'var(--success)':cAvg&&cAvg>=7?'var(--warning)':cAvg?'var(--danger)':'var(--muted)'}">${cAvg||'-'}</td>
+      <td style="text-align:center"><input type="number" class="grade-input" id="gr_${s.id}" min="0" max="10" step="0.1" value="${val}" placeholder="-"></td></tr>`}).join('')}</tbody></table></div>
+  </div>`;
+}
+
+// Llenar calificaciones desde porcentaje de asistencia
+function autoFillAtt(){
+  const studs=gStudents(selGid);
+  studs.forEach(s=>{
+    const st=attStats(s.id,selGid);
+    const score=round1(clamp(st.pct/10,0,10));
+    const inp=document.getElementById('gr_'+s.id);
+    if(inp)inp.value=score;
+  });
+  toast('Calificaciones llenadas desde asistencia','info');
+}
+
+// Tabla de calificaciones finales (reutilizable)
+function rFinalTable(g,studs){
+  if(!studs.length)return'';
+  return`<div class="data-card"><div style="padding:14px 18px;border-bottom:1px solid var(--border)"><h4 style="font-weight:700;font-size:.92rem"><i class="fa-solid fa-graduation-cap" style="color:var(--accent);margin-right:6px"></i>Calificaciones Finales</h4></div>
+  <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>#</th><th>Alumno</th>${g.scheme.map(c=>`<th style="text-align:center;font-size:.7rem;color:${c.color}">${c.name.slice(0,10)}<br><span class="num">${c.weight}%</span></th>`).join('')}<th style="text-align:center">FINAL</th></tr></thead>
+  <tbody>${studs.map((s,i)=>`<tr><td class="num" style="color:var(--muted);font-size:.78rem">${i+1}</td><td style="font-weight:600;font-size:.88rem">${s.name}</td>
+  ${g.scheme.map(c=>{const a=catStudentAvg(g.id,c.id,s.id);return`<td class="num" style="text-align:center;font-size:.85rem;color:${a&&a>=8?'var(--success)':a&&a>=7?'var(--warning)':a?'var(--danger)':'var(--muted)'}">${a||'-'}</td>`}).join('')}
+  <td class="num" style="text-align:center;font-weight:800;font-size:1.05rem;color:${(f=>f&&f>=8?'var(--success)':f&&f>=7?'var(--warning)':f?'var(--danger)':'var(--muted)')(finalGrade(g.id,s.id))}">${finalGrade(g.id,s.id)||'-'}</td></tr>`).join('')}</tbody></table></div></div>`;
+}
+
+// === CRUD ACTIVIDADES ===
+function mActivity(eid){
+  const g=S.groups.find(x=>x.id===selGid);if(!g||!g.scheme)return;
+  const act=eid?S.activities.find(a=>a.id===eid):null;
+  showM(`<div class="modal-head"><h3 style="font-weight:700">${act?'Editar':'Nueva'} Actividad</h3><button class="btn-icon" onclick="hideM()"><i class="fa-solid fa-xmark"></i></button></div>
+  <div class="modal-body"><div style="display:grid;gap:12px">
+    <div><label>Categoría</label><select class="input" id="fAC" ${act?'disabled':''}>${g.scheme.map(c=>`<option value="${c.id}" ${c.id===(act?act.categoryId:selCatId)?'selected':''}>${c.name} (${c.weight}%)</option>`).join('')}</select></div>
+    <div><label>Nombre de la Actividad</label><input class="input" id="fAN" value="${act?act.name:''}" placeholder="Ej: Examen Parcial 1"></div>
+    <div><label>Fecha</label><input type="date" class="input" id="fAD" value="${act?act.date:new Date().toISOString().split('T')[0]}"></div>
+  </div></div>
+  <div class="modal-foot"><button class="btn btn-ghost" onclick="hideM()">Cancelar</button><button class="btn btn-primary" onclick="sActivity('${eid||''}')">${act?'Guardar':'Crear'}</button></div>`);
+}
+function sActivity(eid){
+  const cid=$('#fAC').value,n=$('#fAN').value.trim(),d=$('#fAD').value;
+  if(!n){toast('Ingresa nombre','error');return}
+  if(eid){
+    const a=S.activities.find(x=>x.id===eid);
+    if(a)Object.assign(a,{name:n,date:d});
+    toast('Actividad actualizada','success');
+  }else{
+    const studs=gStudents(selGid);
+    S.activities.push({id:uid(),groupId:selGid,categoryId:cid,name:n,date:d,maxScore:10,grades:studs.map(s=>({studentId:s.id,score:null}))});
+    selCatId=cid;
+    toast('Actividad creada','success');
+  }
+  save();hideM();render();
+}
+function delActivity(id){
+  const a=S.activities.find(x=>x.id===id);if(!a)return;
+  confirm(`Eliminar "${a.name}"?`,()=>{
+    S.activities=S.activities.filter(x=>x.id!==id);
+    evalView='acts';selActId=null;save();toast('Eliminada','info');render();
+  });
+}
+function sGrades(){
+  const act=S.activities.find(a=>a.id===selActId);if(!act)return;
+  const studs=gStudents(selGid);let up=0;
+  studs.forEach(s=>{
+    const inp=document.getElementById('gr_'+s.id);if(!inp)return;
+    const v=inp.value.trim();
+    const score=v===''?null:clamp(round1(parseFloat(v)||0),0,10);
+    const ex=act.grades.find(g=>g.studentId===s.id);
+    if(ex){if(ex.score!==score)up++;ex.score=score}
+    else{act.grades.push({studentId:s.id,score});up++}
+  });
+  save();toast(`Guardadas (${up} cambios)`,'success');rEvalBody();
+}
+
+/* ================================================================
+   REPORTES
+================================================================ */
+function rReport(c){
+  if(!selGid&&S.groups.length)selGid=S.groups[0].id;
+  c.innerHTML=`<div style="display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin-bottom:18px">
+    <div style="min-width:200px"><label>Grupo</label><select class="input" id="rGrp" onchange="selGid=this.value;$('#rStu').value='all';rRepBody()">${S.groups.map(g=>`<option value="${g.id}" ${g.id===selGid?'selected':''}>${g.name}</option>`).join('')}</select></div>
+    <div style="min-width:240px"><label>Alumno</label><select class="input" id="rStu" onchange="rRepBody()"><option value="all">Todos (resumen grupal)</option>${gStudents(selGid).map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select></div>
+    <button class="btn btn-accent" onclick="printRep()"><i class="fa-solid fa-print"></i> Imprimir</button>
+  </div><div id="rBody"></div>`;
+  rRepBody();
+}
+function rRepBody(){
+  const el=$('#rBody');if(!el)return;
+  const gid=$('#rGrp')?.value,sid=$('#rStu')?.value;
+  if(!gid){el.innerHTML='<div style="text-align:center;padding:50px;color:var(--muted)">Selecciona grupo</div>';return}
+  const g=S.groups.find(x=>x.id===gid),studs=gStudents(gid);
+
+  if(sid==='all'){
+    el.innerHTML=`<div class="data-card" id="pZone"><div style="padding:16px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center"><div><h3 style="font-weight:700">${g.name}</h3><span style="font-size:.8rem;color:var(--muted)">${g.subject} · ${g.cycle} · ${g.schedule}</span></div>${instBadge(g.institution)}</div>
+    <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>#</th><th>Matrícula</th><th>Nombre</th><th>Asist.</th>${g.scheme?g.scheme.map(c=>`<th style="text-align:center;font-size:.7rem;color:${c.color}">${c.name.slice(0,10)}<br>${c.weight}%</th>`).join(''):''}<th style="text-align:center">FINAL</th></tr></thead>
+    <tbody>${studs.map((s,i)=>{const at=attStats(s.id,gid),f=finalGrade(gid,s.id);return`<tr><td class="num" style="color:var(--muted)">${i+1}</td><td class="num" style="color:var(--muted);font-size:.82rem">${s.matricula}</td><td style="font-weight:600">${s.name}</td>
+    <td><div style="display:flex;align-items:center;gap:5px"><div class="progress" style="width:55px"><div class="progress-fill" style="width:${at.pct}%;background:${at.pct>=80?'var(--success)':at.pct>=60?'var(--warning)':'var(--danger)'}"></div></div><span class="num" style="font-size:.8rem">${at.total?at.pct+'%':'-'}</span></div></td>
+    ${g.scheme?g.scheme.map(c=>{const a=catStudentAvg(gid,c.id,s.id);return`<td class="num" style="text-align:center;font-size:.85rem;color:${a&&a>=8?'var(--success)':a&&a>=7?'var(--warning)':a?'var(--danger)':'var(--muted)'}">${a||'-'}</td>`}).join(''):''}
+    <td class="num" style="text-align:center;font-weight:800;font-size:1.05rem;color:${f&&f>=8?'var(--success)':f&&f>=7?'var(--warning)':f?'var(--danger)':'var(--muted)'}">${f||'-'}</td></tr>`}).join('')}</tbody></table></div></div>`;
+  }else{
+    const s=studs.find(x=>x.id===sid);if(!s){el.innerHTML='';return}
+    const at=attStats(s.id,gid),f=finalGrade(gid,s.id);
+    el.innerHTML=`<div class="boleta" id="pZone">
+      <div class="boleta-hdr"><div style="font-size:.78rem;opacity:.8;margin-bottom:3px">${g.institution==='universidad'?'UNIVERSIDAD':'CONALEP'}</div><h2 style="font-size:1.2rem;font-weight:800;letter-spacing:.01em">Boleta de Calificaciones</h2><div style="font-size:.8rem;opacity:.8;margin-top:3px">${g.cycle}</div></div>
+      <div class="boleta-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)">
+          <div><span style="font-size:.72rem;color:var(--muted);text-transform:uppercase;font-weight:600;letter-spacing:.04em">Alumno</span><div style="font-weight:700;font-size:1rem;margin-top:2px">${s.name}</div></div>
+          <div><span style="font-size:.72rem;color:var(--muted);text-transform:uppercase;font-weight:600;letter-spacing:.04em">Matrícula</span><div class="num" style="font-weight:700;font-size:1rem;margin-top:2px">${s.matricula}</div></div>
+          <div><span style="font-size:.72rem;color:var(--muted);text-transform:uppercase;font-weight:600;letter-spacing:.04em">Materia</span><div style="font-weight:600;margin-top:2px">${g.name}</div></div>
+          <div><span style="font-size:.72rem;color:var(--muted);text-transform:uppercase;font-weight:600;letter-spacing:.04em">Horario</span><div style="font-weight:500;margin-top:2px;color:var(--muted)">${g.schedule}</div></div>
+        </div>
+        <h4 style="font-weight:700;font-size:.88rem;margin-bottom:12px"><i class="fa-solid fa-clipboard-check" style="color:var(--primary);margin-right:6px"></i>Asistencia</h4>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px">
+          ${[{l:'Sesiones',v:at.total,c:'var(--text)'},{l:'Presentes',v:at.p,c:'var(--success)'},{l:'Ausentes',v:at.a,c:'var(--danger)'},{l:'Porcentaje',v:at.total?at.pct+'%':'-',c:at.pct>=80?'var(--success)':at.pct>=60?'var(--warning)':'var(--danger)'}].map(x=>`<div style="background:var(--bg);border-radius:8px;padding:12px;text-align:center"><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;font-weight:600">${x.l}</div><div class="num" style="font-size:1.3rem;font-weight:700;margin-top:3px;color:${x.c}">${x.v}</div></div>`).join('')}
+        </div>
+        <h4 style="font-weight:700;font-size:.88rem;margin-bottom:12px"><i class="fa-solid fa-scale-balanced" style="color:var(--accent);margin-right:6px"></i>Desglose por Categoría</h4>
+        ${g.scheme&&g.scheme.length?`<table class="tbl" style="margin-bottom:20px"><thead><tr><th>Categoría</th><th style="text-align:center">Pond.</th><th style="text-align:center">Actividades</th><th style="text-align:center">Promedio</th><th style="text-align:center">Ponderado</th></tr></thead><tbody>${g.scheme.map(c=>{
+          const acts=gActs(gid,c.id),avg=catStudentAvg(gid,c.id,s.id),pond=avg!==null?round1(avg*(c.weight/100)):null;
+          return`<tr><td><div style="display:flex;align-items:center;gap:7px"><div style="width:8px;height:8px;border-radius:2px;background:${c.color}"></div><span style="font-weight:600">${c.name}</span></div></td>
+          <td class="num" style="text-align:center">${c.weight}%</td><td class="num" style="text-align:center;color:var(--muted)">${acts.length}</td>
+          <td class="num" style="text-align:center;font-weight:600;color:${avg&&avg>=8?'var(--success)':avg&&avg>=7?'var(--warning)':avg?'var(--danger)':'var(--muted)'}">${avg||'-'}</td>
+          <td class="num" style="text-align:center;font-weight:600;color:${pond&&pond>=8?'var(--success)':pond&&pond>=7?'var(--warning)':pond?'var(--danger)':'var(--muted)'}">${pond||'-'}</td></tr>`}).join('')}</tbody></table>`:'<div style="text-align:center;padding:20px;color:var(--muted);margin-bottom:20px">Sin esquema configurado</div>'}
+        <div style="background:linear-gradient(135deg,rgba(14,165,115,.12),rgba(14,165,115,.04));border:1px solid rgba(14,165,115,.25);border-radius:11px;padding:18px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-weight:700;font-size:.95rem">CALIFICACIÓN FINAL</span>
+          <span class="num" style="font-size:2.2rem;font-weight:800;color:${f&&f>=8?'var(--success)':f&&f>=7?'var(--warning)':f?'var(--danger)':'var(--muted)'}">${f||'-'}</span>
+        </div>
+      </div>
+    </div>`;
+  }
+}
+
+function printRep(){
+  const z=document.getElementById('pZone');if(!z)return;
+  const w=window.open('','','width=800,height=600');
+  w.document.write(`<!DOCTYPE html><html><head><title>Reporte</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',sans-serif;padding:24px;color:#1a1a2e;background:#fff}table{width:100%;border-collapse:collapse}th,td{padding:7px 10px;text-align:left;border-bottom:1px solid #e0e0e0;font-size:12px}th{background:#f5f5f5;font-size:10px;text-transform:uppercase;color:#666;font-weight:600}.num{font-family:Consolas,monospace}.badge-uni{background:#e6f7f0;color:#0EA573;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:600}.badge-cona{background:#fef3e0;color:#c77d00;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:600}.boleta{border:2px solid #1a1a2e;border-radius:12px;overflow:hidden;max-width:640px;margin:0 auto}.boleta-hdr{background:#0EA573;padding:20px;text-align:center;color:#fff}.boleta-body{padding:20px}h2{font-size:16px;font-weight:800}h4{font-size:12px;font-weight:700;margin:14px 0 8px}.progress{height:5px;background:#eee;border-radius:3px;display:inline-block;vertical-align:middle}.progress-fill{height:100%;border-radius:3px}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:2px solid #e0e0e0}.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}.label-sm{font-size:9px;color:#888;text-transform:uppercase;font-weight:600}.stat-box{background:#f8f9fa;border-radius:6px;padding:8px;text-align:center}.stat-label{font-size:9px;color:#888;text-transform:uppercase;font-weight:600}.stat-val{font-size:18px;font-weight:700;margin-top:2px}.avg-box{background:linear-gradient(135deg,#e6f7f0,#f0faf5);border:1px solid #0EA573;border-radius:8px;padding:14px;display:flex;align-items:center;justify-content:space-between}.avg-val{font-size:24px;font-weight:800;color:#0EA573}@media print{body{padding:8px}}</style></head><body>${z.innerHTML}</body></html>`);
+  w.document.close();setTimeout(()=>w.print(),400);
+}
+
+/* ================================================================
+   INICIALIZACIÓN
+================================================================ */
+function init(){
+  if(!load()||!S.groups.length)seed();
+  // Migrar grupos sin scheme
+  S.groups.forEach(g=>{if(!g.scheme)g.scheme=[]});
+  // Migrar actividades si no existen (de evaluaciones viejas)
+  if(!S.activities)S.activities=[];
+  save();
+  renderSideNav();
+  nav('dashboard');
+}
+init();
+</script>
+</body>
+</html>

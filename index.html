@@ -14,8 +14,6 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 15% -5%,rgba(14,165,115,.07),transparent 55%),radial-gradient(ellipse at 85% 105%,rgba(232,153,26,.04),transparent 55%);pointer-events:none;z-index:0}
 .num{font-family:'Space Grotesk',monospace}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-
-/* Sidebar */
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:252px;background:var(--bg2);border-right:1px solid var(--border);z-index:40;display:flex;flex-direction:column;transition:transform .3s}
 .sidebar .logo{padding:22px 18px;border-bottom:1px solid var(--border)}
 .sidebar nav{flex:1;padding:10px 8px;overflow-y:auto}
@@ -23,14 +21,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .nav-item:hover{background:var(--primary-bg);color:var(--text)}
 .nav-item.active{background:var(--primary-bg);color:var(--primary);border-left-color:var(--primary);font-weight:600}
 .nav-item i{width:18px;text-align:center;font-size:.95rem}
-
-/* Main */
 .main{margin-left:252px;min-height:100vh;position:relative;z-index:1}
 .main-header{padding:18px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(11,15,20,.85);backdrop-filter:blur(14px);position:sticky;top:0;z-index:20;gap:12px;flex-wrap:wrap}
 .main-content{padding:24px 28px}
 .menu-btn{display:none;background:none;border:none;color:var(--text);font-size:1.2rem;cursor:pointer}
-
-/* Componentes */
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:20px;transition:all .25s}
 .stat-card:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.25)}
 .data-card{background:var(--card);border:1px solid var(--border);border-radius:13px;overflow:hidden}
@@ -59,8 +53,6 @@ label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin-b
 .progress-fill{height:100%;border-radius:4px;transition:width .4s}
 .grade-input{width:64px;text-align:center;background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:7px 4px;color:var(--text);font-family:'Space Grotesk',monospace;font-size:.95rem;font-weight:600;outline:none;transition:border-color .2s}
 .grade-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(14,165,115,.1)}
-
-/* Modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .2s}
 .modal-overlay.show{opacity:1;pointer-events:auto}
 .modal{background:var(--card);border:1px solid var(--border);border-radius:14px;width:100%;max-width:560px;max-height:88vh;overflow-y:auto;transform:scale(.96) translateY(8px);transition:transform .25s}
@@ -68,8 +60,6 @@ label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin-b
 .modal-head{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .modal-body{padding:22px}
 .modal-foot{padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
-
-/* Toast */
 .toast-box{position:fixed;top:16px;right:16px;z-index:200;display:flex;flex-direction:column;gap:6px}
 .toast{padding:12px 18px;border-radius:9px;font-size:.84rem;font-weight:500;display:flex;align-items:center;gap:9px;animation:tIn .3s;min-width:260px;box-shadow:0 6px 20px rgba(0,0,0,.4)}
 .toast-success{background:#14532d;border:1px solid #166534;color:#86efac}
@@ -77,16 +67,12 @@ label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin-b
 .toast-info{background:#0c4a6e;border:1px solid #075985;color:#7dd3fc}
 @keyframes tIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
 @keyframes tOut{to{opacity:0;transform:translateX(30px)}}
-
-/* Asistencia */
 .att-btn{width:36px;height:32px;border-radius:6px;border:2px solid var(--border);background:transparent;cursor:pointer;font-size:.72rem;font-weight:700;transition:all .15s;font-family:'Space Grotesk',monospace}
 .att-btn:hover{transform:scale(1.08)}
 .att-btn.sel-p{background:rgba(34,197,94,.18);border-color:#22C55E;color:#22C55E}
 .att-btn.sel-a{background:rgba(239,68,68,.18);border-color:#EF4444;color:#EF4444}
 .att-btn.sel-r{background:rgba(245,158,11,.18);border-color:#F59E0B;color:#F59E0B}
 .att-btn.sel-j{background:rgba(56,189,248,.18);border-color:#38BDF8;color:#38BDF8}
-
-/* Esquema de evaluación */
 .weight-bar{display:flex;height:28px;border-radius:8px;overflow:hidden;background:var(--bg)}
 .weight-seg{display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:#fff;transition:all .3s;min-width:20px;overflow:hidden;white-space:nowrap}
 .cat-card{background:var(--bg);border:2px solid var(--border);border-radius:11px;padding:16px;cursor:pointer;transition:all .2s;position:relative}
@@ -95,16 +81,11 @@ label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin-b
 .act-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid rgba(37,51,71,.4);transition:background .15s;cursor:pointer}
 .act-row:hover{background:rgba(14,165,115,.04)}
 .act-row:last-child{border-bottom:none}
-
-/* Animación */
 .fade-in{animation:fadeIn .25s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-
-/* Boleta */
 .boleta{background:var(--card);border:2px solid var(--border);border-radius:14px;overflow:hidden;max-width:680px;margin:0 auto}
 .boleta-hdr{background:linear-gradient(135deg,var(--primary),#0a7a58);padding:24px;text-align:center;color:#fff}
 .boleta-body{padding:24px}
-
 @media(max-width:768px){
   .sidebar{transform:translateX(-100%)}
   .sidebar.open{transform:translateX(0)}
@@ -128,7 +109,7 @@ label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin-b
     </div>
   </div>
   <nav id="sideNav"></nav>
-  <div style="padding:14px 18px;border-top:1px solid var(--border);font-size:.72rem;color:var(--muted);display:flex;align-items:center;gap:5px"><i class="fa-solid fa-database" style="font-size:.65rem"></i> Datos guardados localmente</div>
+  <div style="padding:14px 18px;border-top:1px solid var(--border);font-size:.72rem;color:var(--muted);display:flex;align-items:center;gap:5px"><i class="fa-solid fa-cloud" style="font-size:.65rem"></i> Datos guardados en la nube</div>
 </aside>
 
 <div class="main">
@@ -144,7 +125,14 @@ label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin-b
 
 <div class="modal-overlay" id="mOverlay" onclick="event.target===this&&hideM()"><div class="modal" id="mContent"></div></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+/* ================================================================
+   CONFIGURACIÓN DE SUPABASE – CAMBIA ESTOS VALORES POR LOS TUYOS
+================================================================ */
+const SUPABASE_URL = 'https://qalhkkyipudqkqtylguf.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFhbGhra3lpcHVkcWtxdHlsZ3VmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzMTI3NzIsImV4cCI6MjA5OTg4ODc3Mn0.c1kIU7z_G98Iw9Kb7hPlpTFLaIclZD7S2IYjV7mjO9k'; 
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 /* ================================================================
    ESTADO GLOBAL
 ================================================================ */
@@ -153,22 +141,21 @@ const NAV=[{id:'dashboard',icon:'fa-chart-line',label:'Dashboard'},{id:'grupos',
 
 let S={groups:[],students:[],attendance:[],activities:[]};
 let curSec='dashboard',selGid=null,selCatId=null,selActId=null,selDate=new Date().toISOString().split('T')[0];
-let evalView='cats'; // cats | acts | grades
+let evalView='cats';
 
 const $=s=>document.querySelector(s);
 const $$=s=>document.querySelectorAll(s);
-function uid(){return Date.now().toString(36)+Math.random().toString(36).substr(2,6)}
 function gStudents(gid){return S.students.filter(s=>s.groupId===gid).sort((a,b)=>a.name.localeCompare(b.name))}
 function gActs(gid,cid){return cid?S.activities.filter(a=>a.groupId===gid&&a.categoryId===cid):S.activities.filter(a=>a.groupId===gid)}
 function gAtt(gid){return S.attendance.filter(a=>a.groupId===gid).sort((a,b)=>b.date.localeCompare(a.date))}
 function instBadge(i){return i==='universidad'?'<span class="badge badge-uni">Universidad</span>':'<span class="badge badge-cona">CONALEP</span>'}
 function clamp(v,mn,mx){return Math.max(mn,Math.min(mx,v))}
 function round1(v){return Math.round(v*10)/10}
+function uid(){return crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36)+Math.random().toString(36).substr(2,9)}
 
 /* ================================================================
    CÁLCULOS DE CALIFICACIONES
 ================================================================ */
-// Promedio de un alumno en una categoría (promedia todas las actividades de esa categoría)
 function catStudentAvg(gid,cid,sid){
   const acts=gActs(gid,cid);
   if(!acts.length)return null;
@@ -176,16 +163,12 @@ function catStudentAvg(gid,cid,sid){
   acts.forEach(a=>{const g=a.grades.find(x=>x.studentId===sid);if(g&&g.score!==null&&g.score!==undefined){sum+=g.score;cnt++}});
   return cnt?round1(sum/cnt):null;
 }
-
-// Promedio general de una categoría (promedio de todos los alumnos en esa categoría)
 function catGroupAvg(gid,cid){
   const studs=gStudents(gid);if(!studs.length)return null;
   let sum=0,cnt=0;
   studs.forEach(s=>{const a=catStudentAvg(gid,cid,s.id);if(a!==null){sum+=a;cnt++}});
   return cnt?round1(sum/cnt):null;
 }
-
-// Calificación final de un alumno (suma ponderada de todas las categorías)
 function finalGrade(gid,sid){
   const grp=S.groups.find(g=>g.id===gid);
   if(!grp||!grp.scheme||!grp.scheme.length)return null;
@@ -196,16 +179,12 @@ function finalGrade(gid,sid){
   });
   return hasAny?round1(total):null;
 }
-
-// Promedio final del grupo
 function groupFinalAvg(gid){
   const studs=gStudents(gid);if(!studs.length)return null;
   let sum=0,cnt=0;
   studs.forEach(s=>{const f=finalGrade(gid,s.id);if(f!==null){sum+=f;cnt++}});
   return cnt?round1(sum/cnt):null;
 }
-
-// Estadísticas de asistencia
 function attStats(sid,gid){
   const recs=gAtt(gid);if(!recs.length)return{total:0,p:0,a:0,r:0,j:0,pct:0};
   let p=0,a=0,r=0,j=0;
@@ -215,86 +194,62 @@ function attStats(sid,gid){
 }
 
 /* ================================================================
-   PERSISTENCIA
+   CARGA DE DATOS DESDE SUPABASE
 ================================================================ */
-function save(){try{localStorage.setItem('cd2',JSON.stringify(S))}catch(e){}}
-function load(){try{const d=localStorage.getItem('cd2');if(d){S=JSON.parse(d);return true}}catch(e){}return false}
-
-/* ================================================================
-   DATOS DE EJEMPLO
-================================================================ */
-function seed(){
-  const g1=uid(),g2=uid(),g3=uid();
-  const sc1=[{id:uid(),name:'Exámenes Parciales',weight:40},{id:uid(),name:'Tareas',weight:20},{id:uid(),name:'Asistencia',weight:10},{id:uid(),name:'Proyecto Integrador',weight:15},{id:uid(),name:'Plataformas',weight:10},{id:uid(),name:'Otros',weight:5}];
-  sc1.forEach((c,i)=>c.color=CAT_COLORS[i]);
-  const sc2=[{id:uid(),name:'Exámenes',weight:35},{id:uid(),name:'Prácticas de Lab',weight:25},{id:uid(),name:'Tareas',weight:15},{id:uid(),name:'Proyecto',weight:15},{id:uid(),name:'Asistencia',weight:10}];
-  sc2.forEach((c,i)=>c.color=CAT_COLORS[i]);
-  const sc3=[{id:uid(),name:'Exámenes',weight:40},{id:uid(),name:'Prácticas Taller',weight:30},{id:uid(),name:'Portafolio',weight:15},{id:uid(),name:'Asistencia',weight:15}];
-  sc3.forEach((c,i)=>c.color=CAT_COLORS[i]);
-
-  S.groups=[
-    {id:g1,name:'Programación Web',subject:'Programación Web',institution:'universidad',cycle:'2025-1',schedule:'Lun-Mié-Vie 8:00-10:00',color:'#0EA573',scheme:sc1},
-    {id:g2,name:'Bases de Datos',subject:'Bases de Datos',institution:'universidad',cycle:'2025-1',schedule:'Mar-Jue 10:00-12:00',color:'#E8991A',scheme:sc2},
-    {id:g3,name:'Prog. Básica',subject:'Programación Básica',institution:'conalep',cycle:'2025-A',schedule:'Lun-Mié 8:00-9:30',color:'#38BDF8',scheme:sc3}
-  ];
-
-  const names=['María García López','Carlos Hernández Ruiz','Ana Patricia Martínez','José Eduardo Sánchez','Sofía Ramírez Torres','Diego Alejandro Flores','Valentina Morales Jiménez','Luis Fernando Castro','Camila Rojas Mendoza','Santiago Vargas Medina','Isabella Reyes Díaz','Mateo Ortiz Guzmán','Fernanda Ríos Peña','Emilio Lara Salinas','Renata Delgado Fuentes'];
-  let si=0;
-  function addS(gid,n){for(let i=0;i<n;i++){S.students.push({id:uid(),groupId:gid,name:names[si%names.length],matricula:String(si+1).padStart(6,'0'),email:'',phone:''});si++}}
-  addS(g1,5);addS(g2,4);addS(g3,5);
-
-  // Asistencia ejemplo
-  ['2025-07-07','2025-07-08','2025-07-09','2025-07-10','2025-07-11'].forEach(d=>{
-    S.groups.forEach(g=>{
-      const studs=gStudents(g.id);
-      S.attendance.push({id:uid(),groupId:g.id,date:d,records:studs.map(s=>({studentId:s.id,status:Math.random()>.15?'P':(Math.random()>.5?'R':'A')}))});
-    });
-  });
-
-  // Actividades ejemplo
-  function addAct(gid,cid,name,date,grades){
-    const studs=gStudents(gid);
-    S.activities.push({id:uid(),groupId:gid,categoryId:cid,name,date,maxScore:10,grades:studs.map((s,i)=>({studentId:s.id,score:grades?grades[i]:round1(5+Math.random()*5)}))});
+async function loadFromSupabase(){
+  const {data:groups}=await supabase.from('groups').select('*');
+  S.groups=groups||[];
+  for(let g of S.groups){
+    const {data:cats}=await supabase.from('evaluation_categories').select('*').eq('group_id',g.id);
+    g.scheme=cats||[];
   }
-  // Grupo 1
-  addAct(g1,sc1[0].id,'Examen Parcial 1','2025-07-10');
-  addAct(g1,sc1[1].id,'Tarea 1 - HTML','2025-07-05');
-  addAct(g1,sc1[1].id,'Tarea 2 - CSS','2025-07-12');
-  addAct(g1,sc1[2].id,'Asistencia Periodo 1','2025-07-11',gStudents(g1).map(s=>round1(attStats(s.id,g1).pct/10)));
-  addAct(g1,sc1[3].id,'Proyecto - Sitio Web','2025-07-15');
-  addAct(g1,sc1[4].id,'Actividad Platforma 1','2025-07-08');
-  // Grupo 2
-  addAct(g2,sc2[0].id,'Examen Parcial 1','2025-07-11');
-  addAct(g2,sc2[1].id,'Práctica 1 - SQL','2025-07-06');
-  addAct(g2,sc2[1].id,'Práctica 2 - Joins','2025-07-13');
-  addAct(g2,sc2[2].id,'Tarea 1 - Modelo ER','2025-07-09');
-  addAct(g2,sc2[3].id,'Proyecto - Base de Datos','2025-07-16');
-  // Grupo 3
-  addAct(g3,sc3[0].id,'Examen Parcial 1','2025-07-10');
-  addAct(g3,sc3[1].id,'Práctica 1 - PSeInt','2025-07-07');
-  addAct(g3,sc3[1].id,'Práctica 2 - C++ Básico','2025-07-14');
-  addAct(g3,sc3[2].id,'Portafolio Evidencias','2025-07-16');
-
-  save();
+  const {data:students}=await supabase.from('students').select('*');
+  S.students=students||[];
+  const {data:sessions}=await supabase.from('attendance_sessions').select('*, records:attendance_records(*)');
+  S.attendance=(sessions||[]).map(s=>({id:s.id,groupId:s.group_id,date:s.date,records:(s.records||[]).map(r=>({studentId:r.student_id,status:r.status}))}));
+  const {data:activities}=await supabase.from('activities').select('*, grades:activity_grades(*)');
+  S.activities=(activities||[]).map(a=>({id:a.id,groupId:a.group_id,categoryId:a.category_id,name:a.name,date:a.date,maxScore:a.max_score,grades:(a.grades||[]).map(g=>({studentId:g.student_id,score:g.score}))}));
 }
 
 /* ================================================================
-   NAVEGACIÓN
+   DATOS DE EJEMPLO (solo la primera vez)
 ================================================================ */
-function nav(sec){
-  curSec=sec;selCatId=null;selActId=null;evalView='cats';
-  $$('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.s===sec));
-  const t={dashboard:'Dashboard',grupos:'Gestión de Grupos',alumnos:'Alumnos',asistencia:'Asistencia',evaluaciones:'Evaluaciones',reportes:'Reportes'};
-  $('#pageTitle').textContent=t[sec]||'';
-  $('#hdrActions').innerHTML='';
-  render();
-  $('#sidebar').classList.remove('open');
+async function seedIfEmpty(){
+  if(S.groups.length>0)return;
+  const {data:g1}=await supabase.from('groups').insert({
+    name:'Programación Web',subject:'Programación Web',institution:'universidad',
+    cycle:'2025-1',schedule:'Lun-Mié-Vie 8:00-10:00',color:CAT_COLORS[0]
+  }).select().single();
+  const {data:g2}=await supabase.from('groups').insert({
+    name:'Bases de Datos',subject:'Bases de Datos',institution:'universidad',
+    cycle:'2025-1',schedule:'Mar-Jue 10:00-12:00',color:CAT_COLORS[1]
+  }).select().single();
+  const cats1=[
+    {group_id:g1.id,name:'Exámenes Parciales',weight:40,color:CAT_COLORS[0]},
+    {group_id:g1.id,name:'Tareas',weight:20,color:CAT_COLORS[1]},
+    {group_id:g1.id,name:'Asistencia',weight:10,color:CAT_COLORS[2]},
+    {group_id:g1.id,name:'Proyecto Integrador',weight:15,color:CAT_COLORS[3]},
+    {group_id:g1.id,name:'Plataformas',weight:10,color:CAT_COLORS[4]},
+    {group_id:g1.id,name:'Otros',weight:5,color:CAT_COLORS[5]}
+  ];
+  await supabase.from('evaluation_categories').insert(cats1);
+  const cats2=[
+    {group_id:g2.id,name:'Exámenes',weight:35,color:CAT_COLORS[0]},
+    {group_id:g2.id,name:'Prácticas de Lab',weight:25,color:CAT_COLORS[1]},
+    {group_id:g2.id,name:'Tareas',weight:15,color:CAT_COLORS[2]},
+    {group_id:g2.id,name:'Proyecto',weight:15,color:CAT_COLORS[3]},
+    {group_id:g2.id,name:'Asistencia',weight:10,color:CAT_COLORS[4]}
+  ];
+  await supabase.from('evaluation_categories').insert(cats2);
+  const names=['María García López','Carlos Hernández Ruiz','Ana Patricia Martínez','José Eduardo Sánchez','Sofía Ramírez Torres'];
+  for(let name of names){
+    await supabase.from('students').insert({group_id:g1.id,name:name,matricula:''});
+  }
+  await loadFromSupabase();
 }
-function renderSideNav(){$('#sideNav').innerHTML=NAV.map(n=>`<div class="nav-item${n.id===curSec?' active':''}" data-s="${n.id}" onclick="nav('${n.id}')"><i class="fa-solid ${n.icon}"></i>${n.label}</div>`).join('')}
-function render(){$('#mc').innerHTML='';$('#mc').className='main-content fade-in';({dashboard:rDash,grupos:rGrupos,alumnos:rAlumnos,asistencia:rAsist,evaluaciones:rEval,reportes:rReport})[curSec]($('#mc'))}
 
 /* ================================================================
-   TOAST Y MODALES
+   INTERFAZ Y NAVEGACIÓN
 ================================================================ */
 function toast(msg,type='info'){
   const ic={success:'fa-check-circle',error:'fa-circle-xmark',info:'fa-circle-info'};
@@ -308,6 +263,17 @@ function hideM(){$('#mOverlay').classList.remove('show')}
 function confirm(msg,fn){
   showM(`<div class="modal-head"><h3 style="font-weight:700">Confirmar</h3><button class="btn-icon" onclick="hideM()"><i class="fa-solid fa-xmark"></i></button></div><div class="modal-body"><p style="color:var(--muted);line-height:1.6">${msg}</p></div><div class="modal-foot"><button class="btn btn-ghost" onclick="hideM()">Cancelar</button><button class="btn btn-danger" onclick="hideM();(${fn.toString()})()">Eliminar</button></div>`);
 }
+function nav(sec){
+  curSec=sec;selCatId=null;selActId=null;evalView='cats';
+  $$('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.s===sec));
+  const t={dashboard:'Dashboard',grupos:'Gestión de Grupos',alumnos:'Alumnos',asistencia:'Asistencia',evaluaciones:'Evaluaciones',reportes:'Reportes'};
+  $('#pageTitle').textContent=t[sec]||'';
+  $('#hdrActions').innerHTML='';
+  render();
+  $('#sidebar').classList.remove('open');
+}
+function renderSideNav(){$('#sideNav').innerHTML=NAV.map(n=>`<div class="nav-item${n.id===curSec?' active':''}" data-s="${n.id}" onclick="nav('${n.id}')"><i class="fa-solid ${n.icon}"></i>${n.label}</div>`).join('')}
+function render(){$('#mc').innerHTML='';$('#mc').className='main-content fade-in';({dashboard:rDash,grupos:rGrupos,alumnos:rAlumnos,asistencia:rAsist,evaluaciones:rEval,reportes:rReport})[curSec]($('#mc'))}
 
 /* ================================================================
    DASHBOARD
@@ -315,19 +281,17 @@ function confirm(msg,fn){
 function rDash(c){
   const tg=S.groups.length,ts=S.students.length;
   let tPct=0,cPct=0,tAvg=0,cAvg=0;
-  S.groups.forEach(g=>{gStudents(g.id).forEach(s=>{
+  S.groups.forEach(g=>gStudents(g.id).forEach(s=>{
     const st=attStats(s.id,g.id);if(st.total>0){tPct+=st.pct;cPct++}
     const f=finalGrade(g.id,s.id);if(f!==null){tAvg+=f;cAvg++}
-  })});
+  }));
   const aAtt=cPct?Math.round(tPct/cPct):0,aGrd=cAvg?round1(tAvg/cAvg):0;
   let alerts=[];
   S.groups.forEach(g=>gStudents(g.id).forEach(s=>{
     const st=attStats(s.id,g.id);if(st.total>=3&&st.pct<70)alerts.push({s,g,t:'asis',v:st.pct});
     const f=finalGrade(g.id,s.id);if(f!==null&&f<7)alerts.push({s,g,t:'cal',v:f});
   }));
-
-  c.innerHTML=`
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:24px">
+  c.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:24px">
     ${[{l:'GRUPOS ACTIVOS',v:tg,sub:`${S.groups.filter(g=>g.institution==='universidad').length} UNI · ${S.groups.filter(g=>g.institution==='conalep').length} CONA`,ic:'fa-layer-group',bg:'var(--primary-bg)',cl:'var(--primary)'},
        {l:'TOTAL ALUMNOS',v:ts,sub:`Promedio ${tg?Math.round(ts/tg):0}/grupo`,ic:'fa-user-graduate',bg:'var(--accent-bg)',cl:'var(--accent)'},
        {l:'ASISTENCIA PROM.',v:aAtt+'%',sub:'',ic:'fa-clipboard-check',bg:'rgba(34,197,94,.1)',cl:aAtt>=80?'var(--success)':aAtt>=60?'var(--warning)':'var(--danger)',bar:aAtt,barCl:aAtt>=80?'var(--success)':aAtt>=60?'var(--warning)':'var(--danger)'},
@@ -349,7 +313,7 @@ function rDash(c){
 /* ================================================================
    GRUPOS
 ================================================================ */
-function rGrupos(c){
+async function rGrupos(c){
   $('#hdrActions').innerHTML=`<button class="btn btn-primary" onclick="mGroup()"><i class="fa-solid fa-plus"></i> Nuevo Grupo</button>`;
   c.innerHTML=`<div style="display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap">
     <button class="btn btn-sm btn-ghost gf active" data-f="todos" onclick="fGrupos('todos',this)" style="border-color:var(--primary);color:var(--primary)">Todos</button>
@@ -384,19 +348,37 @@ function mGroup(eid){
   </div></div>
   <div class="modal-foot"><button class="btn btn-ghost" onclick="hideM()">Cancelar</button><button class="btn btn-primary" onclick="sGroup('${eid||''}')">${g?'Guardar':'Crear'}</button></div>`);
 }
-function sGroup(eid){
+async function sGroup(eid){
   const n=$('#fGN').value.trim(),s=$('#fGS').value.trim(),i=$('#fGI').value,cy=$('#fGC').value.trim(),h=$('#fGH').value.trim();
   if(!n){toast('Ingresa nombre','error');return}
-  if(eid){const g=S.groups.find(x=>x.id===eid);if(g)Object.assign(g,{name:n,subject:s,institution:i,cycle:cy,schedule:h});toast('Grupo actualizado','success')}
-  else{S.groups.push({id:uid(),name:n,subject:s,institution:i,cycle:cy,schedule:h,color:CAT_COLORS[S.groups.length%CAT_COLORS.length],scheme:[]});toast('Grupo creado','success')}
-  save();hideM();render();
+  const gData={name:n,subject:s,institution:i,cycle:cy,schedule:h,color:CAT_COLORS[S.groups.length%CAT_COLORS.length]};
+  if(eid){
+    const {error}=await supabase.from('groups').update(gData).eq('id',eid);
+    if(error){toast('Error al actualizar','error');return}
+    toast('Grupo actualizado','success');
+  }else{
+    const {error}=await supabase.from('groups').insert(gData);
+    if(error){toast('Error al crear','error');return}
+    toast('Grupo creado','success');
+  }
+  hideM();
+  await loadFromSupabase();
+  render();
 }
-function delGroup(id){const g=S.groups.find(x=>x.id===id);if(!g)return;confirm(`Eliminar "${g.name}" y todos sus datos?`,()=>{S.groups=S.groups.filter(x=>x.id!==id);S.students=S.students.filter(x=>x.groupId!==id);S.attendance=S.attendance.filter(x=>x.groupId!==id);S.activities=S.activities.filter(x=>x.groupId!==id);save();toast('Eliminado','info');render()})}
+async function delGroup(id){
+  const g=S.groups.find(x=>x.id===id);if(!g)return;
+  confirm(`Eliminar "${g.name}" y todos sus datos?`,async ()=>{
+    await supabase.from('groups').delete().eq('id',id);
+    await loadFromSupabase();
+    toast('Eliminado','info');
+    render();
+  });
+}
 
 /* ================================================================
-   ESQUEMA DE EVALUACIÓN (CATEGORÍAS CON PONDERACIÓN)
+   ESQUEMA DE EVALUACIÓN
 ================================================================ */
-function mScheme(gid){
+async function mScheme(gid){
   const g=S.groups.find(x=>x.id===gid);if(!g)return;
   if(!g.scheme)g.scheme=[];
   renderSchemeModal(g);
@@ -410,7 +392,6 @@ function renderSchemeModal(g){
       <span style="font-size:.84rem;color:${ok?'var(--success)':'var(--warning)'};font-weight:600"><i class="fa-solid ${ok?'fa-check-circle':'fa-triangle-exclamation'}" style="margin-right:5px"></i>Ponderación total: <span class="num">${tw}%</span></span>
       ${ok?'<span style="font-size:.78rem;color:var(--success)">Correcto</span>':'<span style="font-size:.78rem;color:var(--warning)">Debe ser 100%</span>'}
     </div>
-    <!-- Barra visual de distribución -->
     <div class="weight-bar" style="margin-bottom:18px">${g.scheme.map(c=>`<div class="weight-seg" style="width:${c.weight}%;background:${c.color||'var(--border)'}" title="${c.name}: ${c.weight}%">${c.weight>=8?c.weight+'%':''}</div>`).join('')}${tw<100?`<div style="flex:1;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.7rem">${100-tw}% libre</div>`:''}</div>
     <div id="schemeCats" style="display:grid;gap:8px;margin-bottom:14px">
     ${g.scheme.map((c,i)=>`<div style="display:grid;grid-template-columns:12px 1fr 80px 34px;gap:8px;align-items:center">
@@ -435,51 +416,56 @@ function addSchemeCat(gid){
 function updSchemeCat(gid,idx,field,val){
   const g=S.groups.find(x=>x.id===gid);if(!g||!g.scheme[idx])return;
   g.scheme[idx][field]=field==='weight'?clamp(val,0,100):val;
-  // Actualizar barra visual sin re-render completo
   const bar=$('.weight-bar');
   const tw=g.scheme.reduce((s,c)=>s+c.weight,0);
   if(bar){
     bar.innerHTML=g.scheme.map((c,i)=>`<div class="weight-seg" style="width:${c.weight}%;background:${c.color||'var(--border)'}" title="${c.name}: ${c.weight}%">${c.weight>=8?c.weight+'%':''}</div>`).join('')+(tw<100?`<div style="flex:1;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.7rem">${100-tw}% libre</div>`:'');
   }
-  // Actualizar indicador de total
-  const ok=tw===100;
   const ind=$('.modal-body > div:first-child');
   if(ind){
-    ind.style.background=ok?'rgba(34,197,94,.08)':'rgba(245,158,11,.08)';
-    ind.style.borderColor=ok?'rgba(34,197,94,.2)':'rgba(245,158,11,.2)';
-    ind.innerHTML=`<span style="font-size:.84rem;color:${ok?'var(--success)':'var(--warning)'};font-weight:600"><i class="fa-solid ${ok?'fa-check-circle':'fa-triangle-exclamation'}" style="margin-right:5px"></i>Ponderación total: <span class="num">${tw}%</span></span>${ok?'<span style="font-size:.78rem;color:var(--success)">Correcto</span>':'<span style="font-size:.78rem;color:var(--warning)">Debe ser 100%</span>'}`;
+    const ok2=tw===100;
+    ind.style.background=ok2?'rgba(34,197,94,.08)':'rgba(245,158,11,.08)';
+    ind.style.borderColor=ok2?'rgba(34,197,94,.2)':'rgba(245,158,11,.2)';
+    ind.innerHTML=`<span style="font-size:.84rem;color:${ok2?'var(--success)':'var(--warning)'};font-weight:600"><i class="fa-solid ${ok2?'fa-check-circle':'fa-triangle-exclamation'}" style="margin-right:5px"></i>Ponderación total: <span class="num">${tw}%</span></span>${ok2?'<span style="font-size:.78rem;color:var(--success)">Correcto</span>':'<span style="font-size:.78rem;color:var(--warning)">Debe ser 100%</span>'}`;
   }
 }
-function delSchemeCat(gid,idx){
+async function delSchemeCat(gid,idx){
   const g=S.groups.find(x=>x.id===gid);if(!g||!g.scheme[idx])return;
   const cat=g.scheme[idx];
-  // Verificar si hay actividades en esta categoría
   const acts=gActs(gid,cat.id);
   if(acts.length){
-    confirm(`Esta categoría tiene ${acts.length} actividad(es). Se eliminarán todas.`,()=>{
-      g.scheme.splice(idx,1);
-      S.activities=S.activities.filter(a=>!(a.groupId===gid&&a.categoryId===cat.id));
+    confirm(`Esta categoría tiene ${acts.length} actividad(es). Se eliminarán todas.`,async ()=>{
+      await supabase.from('activities').delete().eq('category_id',cat.id);
+      await supabase.from('evaluation_categories').delete().eq('id',cat.id);
+      await loadFromSupabase();
       renderSchemeModal(g);
     });
   }else{
-    g.scheme.splice(idx,1);
+    await supabase.from('evaluation_categories').delete().eq('id',cat.id);
+    await loadFromSupabase();
     renderSchemeModal(g);
   }
 }
-function saveScheme(gid){
+async function saveScheme(gid){
   const g=S.groups.find(x=>x.id===gid);if(!g)return;
-  // Validar
   if(!g.scheme.length){toast('Agrega al menos una categoría','error');return}
   const tw=g.scheme.reduce((s,c)=>s+c.weight,0);
   if(tw!==100){toast(`La ponderación total es ${tw}%, debe ser exactamente 100%`,'error');return}
   for(const c of g.scheme){if(!c.name.trim()){toast('Todas las categorías deben tener nombre','error');return}}
-  save();hideM();toast('Esquema guardado','success');render();
+  await supabase.from('evaluation_categories').delete().eq('group_id',g.id);
+  const catsToInsert=g.scheme.map(c=>({id:c.id,group_id:g.id,name:c.name,weight:c.weight,color:c.color}));
+  const {error}=await supabase.from('evaluation_categories').insert(catsToInsert);
+  if(error){toast('Error al guardar','error');return}
+  hideM();
+  await loadFromSupabase();
+  toast('Esquema guardado','success');
+  render();
 }
 
 /* ================================================================
    ALUMNOS
 ================================================================ */
-function rAlumnos(c){
+async function rAlumnos(c){
   if(!selGid&&S.groups.length)selGid=S.groups[0].id;
   $('#hdrActions').innerHTML=`<button class="btn btn-primary" onclick="mStudent()"><i class="fa-solid fa-user-plus"></i> Nuevo Alumno</button>`;
   c.innerHTML=`<div style="margin-bottom:18px;max-width:380px"><label>Grupo</label><select class="input" onchange="selGid=this.value;rAlumTbl()"><option value="">-- Selecciona --</option>${S.groups.map(g=>`<option value="${g.id}" ${g.id===selGid?'selected':''}>${g.name}</option>`).join('')}</select></div><div class="data-card" id="sTbl"></div>`;
@@ -508,19 +494,37 @@ function mStudent(eid){
   </div></div>
   <div class="modal-foot"><button class="btn btn-ghost" onclick="hideM()">Cancelar</button><button class="btn btn-primary" onclick="sStudent('${eid||''}')">${s?'Guardar':'Agregar'}</button></div>`);
 }
-function sStudent(eid){
+async function sStudent(eid){
   const gid=$('#fSG').value,m=$('#fSM').value.trim(),n=$('#fSN').value.trim(),e=$('#fSE').value.trim(),p=$('#fSP').value.trim();
   if(!n){toast('Ingresa nombre','error');return}
-  if(eid){const s=S.students.find(x=>x.id===eid);if(s)Object.assign(s,{groupId:gid,matricula:m,name:n,email:e,phone:p});toast('Actualizado','success')}
-  else{S.students.push({id:uid(),groupId:gid,matricula:m,name:n,email:e,phone:p});toast('Agregado','success')}
-  save();hideM();render();
+  const sData={group_id:gid,matricula:m,name:n,email:e,phone:p};
+  if(eid){
+    const {error}=await supabase.from('students').update(sData).eq('id',eid);
+    if(error){toast('Error al actualizar','error');return}
+    toast('Actualizado','success');
+  }else{
+    const {error}=await supabase.from('students').insert(sData);
+    if(error){toast('Error al agregar','error');return}
+    toast('Agregado','success');
+  }
+  hideM();
+  await loadFromSupabase();
+  render();
 }
-function delStudent(id){const s=S.students.find(x=>x.id===id);if(!s)return;confirm(`Eliminar a "${s.name}"?`,()=>{S.students=S.students.filter(x=>x.id!==id);S.attendance.forEach(a=>{a.records=a.records.filter(r=>r.studentId!==id)});S.activities.forEach(a=>{a.grades=a.grades.filter(g=>g.studentId!==id)});save();toast('Eliminado','info');render()})}
+async function delStudent(id){
+  const s=S.students.find(x=>x.id===id);if(!s)return;
+  confirm(`Eliminar a "${s.name}"?`,async ()=>{
+    await supabase.from('students').delete().eq('id',id);
+    await loadFromSupabase();
+    toast('Eliminado','info');
+    render();
+  });
+}
 
 /* ================================================================
    ASISTENCIA
 ================================================================ */
-function rAsist(c){
+async function rAsist(c){
   if(!selGid&&S.groups.length)selGid=S.groups[0].id;
   c.innerHTML=`<div style="display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin-bottom:18px">
     <div style="min-width:200px"><label>Grupo</label><select class="input" id="aGrp" onchange="selGid=this.value;selDate='${new Date().toISOString().split('T')[0]}';$('#aDate').value=selDate;rAtt()">${S.groups.map(g=>`<option value="${g.id}" ${g.id===selGid?'selected':''}>${g.name}</option>`).join('')}</select></div>
@@ -547,17 +551,29 @@ function rAtt(){
     <span class="badge" style="background:rgba(56,189,248,.12);color:var(--info)"><i class="fa-solid fa-file-medical" style="font-size:.6rem"></i> J: ${cn.J}</span>
   </div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th style="width:36px">#</th><th>Matr.</th><th>Nombre</th><th style="text-align:center">P</th><th style="text-align:center">A</th><th style="text-align:center">R</th><th style="text-align:center">J</th></tr></thead><tbody>${rec.records.map((r,i)=>{const s=studs.find(x=>x.id===r.studentId);if(!s)return'';return`<tr><td class="num" style="color:var(--muted);font-size:.78rem">${i+1}</td><td class="num" style="color:var(--muted);font-size:.82rem">${s.matricula}</td><td style="font-weight:500">${s.name}</td>${['P','A','R','J'].map(st=>`<td style="text-align:center"><button class="att-btn ${r.status===st?'sel-'+st.toLowerCase():''}" onclick="window._tA.records[${i}].status='${st}';rAtt()">${st}</button></td>`).join('')}</tr>`}).join('')}</tbody></table></div>`;
 }
-function sAtt(){
+async function sAtt(){
   if(!window._tA){toast('Sin datos','error');return}
-  const r=window._tA,ex=S.attendance.findIndex(a=>a.groupId===r.groupId&&a.date===r.date);
-  if(ex>=0)S.attendance[ex]=r;else S.attendance.push(r);
-  save();toast('Asistencia guardada','success');rAtt();
+  const r=window._tA;
+  const {data:existing}=await supabase.from('attendance_sessions').select('id').eq('group_id',r.groupId).eq('date',r.date);
+  let sessionId;
+  if(existing.length){
+    sessionId=existing[0].id;
+    await supabase.from('attendance_records').delete().eq('session_id',sessionId);
+  }else{
+    const {data:newS}=await supabase.from('attendance_sessions').insert({group_id:r.groupId,date:r.date}).select().single();
+    sessionId=newS.id;
+  }
+  const records=r.records.map(rec=>({session_id:sessionId,student_id:rec.studentId,status:rec.status}));
+  await supabase.from('attendance_records').insert(records);
+  await loadFromSupabase();
+  toast('Asistencia guardada','success');
+  rAtt();
 }
 
 /* ================================================================
-   EVALUACIONES — SISTEMA COMPLETO CON CATEGORÍAS Y ACTIVIDADES
+   EVALUACIONES
 ================================================================ */
-function rEval(c){
+async function rEval(c){
   if(!selGid&&S.groups.length)selGid=S.groups[0].id;
   $('#hdrActions').innerHTML=`<button class="btn btn-ghost" onclick="mScheme(selGid)" style="margin-right:4px"><i class="fa-solid fa-sliders"></i> Esquema</button>`;
   c.innerHTML=`<div style="margin-bottom:18px;max-width:380px"><label>Grupo</label><select class="input" id="eGrp" onchange="selGid=this.value;selCatId=null;selActId=null;evalView='cats';rEvalBody()">${S.groups.map(g=>`<option value="${g.id}" ${g.id===selGid?'selected':''}>${g.name}</option>`).join('')}</select></div><div id="eBody"></div>`;
@@ -576,23 +592,18 @@ function rEvalBody(){
       <button class="btn btn-primary" onclick="mScheme('${selGid}')"><i class="fa-solid fa-plus"></i> Configurar Esquema</button>
     </div>`;return;
   }
-
   const tw=g.scheme.reduce((s,c)=>s+c.weight,0);
   const studs=gStudents(selGid);
-
   if(evalView==='cats') rEvalCats(el,g,studs,tw);
   else if(evalView==='acts') rEvalActs(el,g,studs);
   else if(evalView==='grades') rEvalGrades(el,g,studs);
 }
 
-// === VISTA DE CATEGORÍAS ===
 function rEvalCats(el,g,studs,tw){
   const ok=tw===100;
   el.innerHTML=`
   ${!ok?`<div style="padding:10px 14px;border-radius:8px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.15);margin-bottom:16px;font-size:.84rem;color:var(--warning);display:flex;align-items:center;gap:8px"><i class="fa-solid fa-triangle-exclamation"></i>La ponderación suma ${tw}% (debe ser 100%). <button class="btn btn-sm btn-ghost" onclick="mScheme('${g.id}')" style="margin-left:auto">Corregir</button></div>`:''}
-  <!-- Barra de distribución -->
   <div class="weight-bar" style="margin-bottom:20px">${g.scheme.map(c=>`<div class="weight-seg" style="width:${c.weight}%;background:${c.color}" title="${c.name}: ${c.weight}%">${c.weight>=10?c.weight+'%':''}</div>`).join('')}</div>
-  <!-- Grid de categorías -->
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-bottom:24px">
   ${g.scheme.map((cat,i)=>{
     const acts=gActs(g.id,cat.id);
@@ -610,17 +621,14 @@ function rEvalCats(el,g,studs,tw){
       <div class="progress" style="margin-top:10px"><div class="progress-fill" style="width:${avg?avg*10:0}%;background:${cat.color}"></div></div>
     </div>`}).join('')}
   </div>
-  <!-- Resumen de calificaciones finales -->
   ${rFinalTable(g,studs)}`;
 }
 
-// === VISTA DE ACTIVIDADES DE UNA CATEGORÍA ===
 function rEvalActs(el,g,studs){
   const cat=g.scheme.find(c=>c.id===selCatId);
   if(!cat){evalView='cats';rEvalBody();return}
   const acts=gActs(g.id,cat.id);
   const catAvg=catGroupAvg(g.id,cat.id);
-
   el.innerHTML=`
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap">
     <button class="btn btn-ghost btn-sm" onclick="evalView='cats';selCatId=null;rEvalBody()"><i class="fa-solid fa-arrow-left"></i> Categorías</button>
@@ -642,14 +650,12 @@ function rEvalActs(el,g,studs){
   <div style="margin-top:20px">${rFinalTable(g,studs)}</div>`;
 }
 
-// === VISTA DE CALIFICACIONES DE UNA ACTIVIDAD ===
 function rEvalGrades(el,g,studs){
   const act=S.activities.find(a=>a.id===selActId);
   if(!act){evalView='acts';rEvalBody();return}
   const cat=g.scheme.find(c=>c.id===act.categoryId);
   const graded=act.grades.filter(x=>x.score!==null&&x.score!==undefined);
   const avg=graded.length?round1(graded.reduce((s,x)=>s+x.score,0)/graded.length):0;
-
   el.innerHTML=`
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap">
     <button class="btn btn-ghost btn-sm" onclick="evalView='acts';selActId=null;rEvalBody()"><i class="fa-solid fa-arrow-left"></i> Actividades</button>
@@ -679,7 +685,6 @@ function rEvalGrades(el,g,studs){
   </div>`;
 }
 
-// Llenar calificaciones desde porcentaje de asistencia
 function autoFillAtt(){
   const studs=gStudents(selGid);
   studs.forEach(s=>{
@@ -691,7 +696,6 @@ function autoFillAtt(){
   toast('Calificaciones llenadas desde asistencia','info');
 }
 
-// Tabla de calificaciones finales (reutilizable)
 function rFinalTable(g,studs){
   if(!studs.length)return'';
   return`<div class="data-card"><div style="padding:14px 18px;border-bottom:1px solid var(--border)"><h4 style="font-weight:700;font-size:.92rem"><i class="fa-solid fa-graduation-cap" style="color:var(--accent);margin-right:6px"></i>Calificaciones Finales</h4></div>
@@ -701,7 +705,9 @@ function rFinalTable(g,studs){
   <td class="num" style="text-align:center;font-weight:800;font-size:1.05rem;color:${(f=>f&&f>=8?'var(--success)':f&&f>=7?'var(--warning)':f?'var(--danger)':'var(--muted)')(finalGrade(g.id,s.id))}">${finalGrade(g.id,s.id)||'-'}</td></tr>`).join('')}</tbody></table></div></div>`;
 }
 
-// === CRUD ACTIVIDADES ===
+/* ================================================================
+   ACTIVIDADES (CRUD)
+================================================================ */
 function mActivity(eid){
   const g=S.groups.find(x=>x.id===selGid);if(!g||!g.scheme)return;
   const act=eid?S.activities.find(a=>a.id===eid):null;
@@ -713,40 +719,60 @@ function mActivity(eid){
   </div></div>
   <div class="modal-foot"><button class="btn btn-ghost" onclick="hideM()">Cancelar</button><button class="btn btn-primary" onclick="sActivity('${eid||''}')">${act?'Guardar':'Crear'}</button></div>`);
 }
-function sActivity(eid){
+async function sActivity(eid){
   const cid=$('#fAC').value,n=$('#fAN').value.trim(),d=$('#fAD').value;
   if(!n){toast('Ingresa nombre','error');return}
   if(eid){
-    const a=S.activities.find(x=>x.id===eid);
-    if(a)Object.assign(a,{name:n,date:d});
+    const {error}=await supabase.from('activities').update({name:n,date:d}).eq('id',eid);
+    if(error){toast('Error al actualizar','error');return}
     toast('Actividad actualizada','success');
   }else{
     const studs=gStudents(selGid);
-    S.activities.push({id:uid(),groupId:selGid,categoryId:cid,name:n,date:d,maxScore:10,grades:studs.map(s=>({studentId:s.id,score:null}))});
+    const {data:newAct,error}=await supabase.from('activities').insert({
+      group_id:selGid,category_id:cid,name:n,date:d,max_score:10
+    }).select().single();
+    if(error){toast('Error al crear','error');return}
+    // Insertar calificaciones nulas para cada alumno
+    if(newAct){
+      const grades=studs.map(s=>({activity_id:newAct.id,student_id:s.id,score:null}));
+      await supabase.from('activity_grades').insert(grades);
+    }
     selCatId=cid;
     toast('Actividad creada','success');
   }
-  save();hideM();render();
+  hideM();
+  await loadFromSupabase();
+  render();
 }
-function delActivity(id){
+async function delActivity(id){
   const a=S.activities.find(x=>x.id===id);if(!a)return;
-  confirm(`Eliminar "${a.name}"?`,()=>{
-    S.activities=S.activities.filter(x=>x.id!==id);
-    evalView='acts';selActId=null;save();toast('Eliminada','info');render();
+  confirm(`Eliminar "${a.name}"?`,async ()=>{
+    await supabase.from('activities').delete().eq('id',id);
+    evalView='acts';selActId=null;
+    await loadFromSupabase();
+    toast('Eliminada','info');
+    render();
   });
 }
-function sGrades(){
+async function sGrades(){
   const act=S.activities.find(a=>a.id===selActId);if(!act)return;
-  const studs=gStudents(selGid);let up=0;
-  studs.forEach(s=>{
-    const inp=document.getElementById('gr_'+s.id);if(!inp)return;
+  const studs=gStudents(selGid);
+  for(let s of studs){
+    const inp=document.getElementById('gr_'+s.id);if(!inp)continue;
     const v=inp.value.trim();
     const score=v===''?null:clamp(round1(parseFloat(v)||0),0,10);
-    const ex=act.grades.find(g=>g.studentId===s.id);
-    if(ex){if(ex.score!==score)up++;ex.score=score}
-    else{act.grades.push({studentId:s.id,score});up++}
-  });
-  save();toast(`Guardadas (${up} cambios)`,'success');rEvalBody();
+    const existing=act.grades.find(g=>g.studentId===s.id);
+    if(existing){
+      if(existing.score!==score){
+        await supabase.from('activity_grades').update({score}).eq('activity_id',act.id).eq('student_id',s.id);
+      }
+    }else{
+      await supabase.from('activity_grades').insert({activity_id:act.id,student_id:s.id,score});
+    }
+  }
+  await loadFromSupabase();
+  toast('Calificaciones guardadas','success');
+  rEvalBody();
 }
 
 /* ================================================================
@@ -766,7 +792,6 @@ function rRepBody(){
   const gid=$('#rGrp')?.value,sid=$('#rStu')?.value;
   if(!gid){el.innerHTML='<div style="text-align:center;padding:50px;color:var(--muted)">Selecciona grupo</div>';return}
   const g=S.groups.find(x=>x.id===gid),studs=gStudents(gid);
-
   if(sid==='all'){
     el.innerHTML=`<div class="data-card" id="pZone"><div style="padding:16px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center"><div><h3 style="font-weight:700">${g.name}</h3><span style="font-size:.8rem;color:var(--muted)">${g.subject} · ${g.cycle} · ${g.schedule}</span></div>${instBadge(g.institution)}</div>
     <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>#</th><th>Matrícula</th><th>Nombre</th><th>Asist.</th>${g.scheme?g.scheme.map(c=>`<th style="text-align:center;font-size:.7rem;color:${c.color}">${c.name.slice(0,10)}<br>${c.weight}%</th>`).join(''):''}<th style="text-align:center">FINAL</th></tr></thead>
@@ -805,7 +830,6 @@ function rRepBody(){
     </div>`;
   }
 }
-
 function printRep(){
   const z=document.getElementById('pZone');if(!z)return;
   const w=window.open('','','width=800,height=600');
@@ -816,13 +840,10 @@ function printRep(){
 /* ================================================================
    INICIALIZACIÓN
 ================================================================ */
-function init(){
-  if(!load()||!S.groups.length)seed();
-  // Migrar grupos sin scheme
+async function init(){
+  await loadFromSupabase();
+  await seedIfEmpty();
   S.groups.forEach(g=>{if(!g.scheme)g.scheme=[]});
-  // Migrar actividades si no existen (de evaluaciones viejas)
-  if(!S.activities)S.activities=[];
-  save();
   renderSideNav();
   nav('dashboard');
 }

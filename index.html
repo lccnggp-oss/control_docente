@@ -187,7 +187,7 @@ function rD(c){
 /* GRUPOS */
 function rG(c){
   $('#hdrActions').innerHTML=`<button class="btn btn-primary" onclick="mGrp()"><i class="fa-solid fa-plus"></i> Nuevo Grupo</button>`;
-  c.innerHTML=`<div style="display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap"><button class="btn btn-sm btn-ghost gf active" data-f="todos" onclick="fGrp('todos',this)" style="border-color:var(--primary);color:var(--primary)">Todos</button><button class="btn btn-sm btn-ghost gf" data-f="universidad" onclick="fGrp('universidad',this)">Universidad</button><button class="btn btn-sm btn-ghost gf" data-f="conalep" onclick="fGrp('conalep',this)">CONALEP</button></div><div class="data-card" id="gTbl"></div>`;
+  c.innerHTML=`<div style="display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap"><button class="btn btn-sm btn-ghost gf active" data-f="todos" onclick="fGrp('todos',this)" style="border-color:var(--primary);color:var(--primary)">Todos</button><button class="btn btn-sm btn-ghost gf" data-f="UTC" onclick="fGrp('universidad',this)">Universidad</button><button class="btn btn-sm btn-ghost gf" data-f="conalep" onclick="fGrp('conalep',this)">CONALEP</button></div><div class="data-card" id="gTbl"></div>`;
   fGrp('todos',$('.gf'));
 }
 function fGrp(f,btn){

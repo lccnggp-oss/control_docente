@@ -499,41 +499,37 @@ function activarModuloExamenes() {
 
 function solicitarExamenIA() {
   const grupoSelect = document.getElementById('selector-grupo-ia');
-  const grupoTexto = grupoSelect.options[grupoSelect.selectedIndex].text;
-  const tema = document.getElementById('tema-examen-ia').value.trim() || 'Temas generales de la materia';
+  const temaInput = document.getElementById('tema-examen-ia');
   
-  if(!grupoSelect.value) {
+  if(!grupoSelect || !grupoSelect.value) {
     alert('Por favor, selecciona primero un grupo.');
     return;
   }
 
-  // Estructuramos las instrucciones maestras para Kimi K3
-  const promptMaestro = `Actúa como un profesor experto de ingeniería. Genera un examen en formato de código HTML limpio (estilo tarjeta oscura, usando Tailwind CSS si es posible) de 5 preguntas sobre "${tema}" adaptado para mi grupo "${grupoTexto}". 
+  const grupoTexto = grupoSelect.options[grupoSelect.selectedIndex].text;
+  const tema = temaInput.value.trim() || 'Temas generales';
+  
+  // Creamos el texto de instrucciones directo
+  const textoPrompt = `Actúa como un profesor de ingeniería. Genera un examen de 20 preguntas sobre "${tema}" para el grupo "${grupoTexto}". REGLAS ANTI-PLAGIO: Usa datos numéricos aleatorios y casos prácticos de la industria en México. Pon las respuestas correctas al final en una sección oculta (<details>). Devuelve el examen en un bloque de código HTML oscuro compatible con Tailwind CSS.`;
 
-REGLAS ESTRICTAS ANTI-PLAGIO:
-1. Si hay problemas matemáticos o lógicos, inventa datos numéricos aleatorios y únicos.
-2. Si son preguntas teóricas, utiliza casos de estudio prácticos o escenarios del entorno industrial real en México.
-3. Pon las respuestas correctas al final en una sección colapsable (<details>) para que pueda calificar rápido.
-
-Devuelve únicamente el bloque de código HTML listo para insertar en mi aplicación escolar.`;
-
-  // Copiar automáticamente el texto al portapapeles del celular
-  navigator.clipboard.writeText(promptMaestro).then(() => {
-    const contenedor = document.getElementById('contenedor-preguntas');
-    contenedor.innerHTML = `
-      <div class="text-center p-2 bg-[var(--primary-bg)] border border-[var(--primary)] rounded-lg">
-        <p class="text-[var(--primary)] text-sm font-semibold mb-1">¡Instrucciones copiadas al celular!</p>
-        <p class="text-xs text-[var(--muted)]">Abre Kimi, pega el texto y cuando te dé el examen en HTML, lo pegaremos aquí.</p>
+  // Cambiamos la interfaz en la pantalla para darte el control total
+  const contenedor = document.getElementById('contenedor-preguntas');
+  contenedor.innerHTML = `
+    <div class="p-4 bg-[var(--bg)] border border-[var(--border)] rounded-lg space-y-3">
+      <p class="text-sm font-semibold text-[var(--primary)]">¡Instrucciones listas para Kimi K3!</p>
+      
+      <textarea id="txt-prompt-ia" class="input w-full h-24 text-xs font-mono bg-[#0B0F14]" readonly>${textoPrompt}</textarea>
+      
+      <div class="flex gap-2">
+        <button class="btn btn-sm btn-ghost w-1/2" onclick="document.getElementById('txt-prompt-ia').select(); document.execCommand('copy'); alert('¡Copiado!');">
+          <i class="fa-solid fa-copy"></i> Copiar Texto
+        </button>
+        <a href="https://kimi.ai" target="_blank" class="btn btn-sm btn-primary w-1/2 text-center justify-center flex items-center">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Kimi.ai
+        </a>
       </div>
-    `;
-    
-    // Abrir Kimi en una nueva pestaña después de 2 segundos
-    setTimeout(() => {
-      window.open('https://kimi.ai', '_blank');
-    }, 2000);
-  }).catch(err => {
-    alert('No se pudo copiar automáticamente. Copia el texto manualmente.');
-  });
+    </div>
+  `;
 }
 
 init();

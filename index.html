@@ -455,19 +455,38 @@ function activarModuloExamenes() {
   const btnExamen = document.getElementById('nav-examenes');
   if(btnExamen) btnExamen.classList.add('active');
   
+  const listaGrupos = (typeof S !== 'undefined' && S.groups) ? S.groups : [];
+  let opcionesHTML = '<option value="">-- Elige un grupo --</option>';
+  listaGrupos.forEach(g => {
+    const inst = g.institution === 'universidad' ? 'UTC' : 'CONALEP';
+    opcionesHTML += `<option value="${g.id}">${g.name} - ${g.subject} (${inst})</option>`;
+  });
+
   const contenedorPrincipal = document.getElementById('mc');
   contenedorPrincipal.innerHTML = `
-    <div id="modulo-examen" class="data-card p-6 bg-[var(--card)] border border-[var(--border)] rounded-[13px]">
+    <div id="modulo-examen" class="data-card p-6 bg-[var(--card)] border border-[var(--border)] rounded-[13px] max-w-xl mx-auto mt-4">
       <div class="flex justify-between items-center mb-6 border-b border-[var(--border)] pb-3">
         <h3 class="text-lg font-semibold flex items-center gap-2">
           <i class="fa-solid fa-wand-magic-sparkles text-[var(--primary)]"></i> 
           Examen Anti-Plagio Kimi K3
         </h3>
-        <span class="badge badge-uni" id="badge-grupo-examen">UTC / CONALEP</span>
+        <span class="badge badge-uni" id="badge-grupo-examen">IA Conectada</span>
       </div>
       
-      <div id="contenedor-preguntas" class="space-y-4 my-4">
-        <p class="text-[var(--muted)] text-sm italic">Elige un grupo o alumno para activar el generador predictivo...</p>
+      <div class="mb-4">
+        <label class="block text-xs uppercase font-semibold text-[var(--muted)] mb-2">Selecciona el Grupo:</label>
+        <select id="selector-grupo-ia" class="input w-full bg-[var(--bg)] text-[var(--text)] border border-[var(--border)] p-2 rounded-md">
+          ${opcionesHTML}
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-xs uppercase font-semibold text-[var(--muted)] mb-2">Temario o Tema del Examen:</label>
+        <input type="text" id="tema-examen-ia" class="input w-full" placeholder="Ej. Ley de Ohm, Redes, etc.">
+      </div>
+      
+      <div id="contenedor-preguntas" class="space-y-4 my-4 p-3 bg-[var(--bg)] rounded-lg min-h-[60px] border border-dashed border-[var(--border)]">
+        <p class="text-[var(--muted)] text-sm italic text-center">Configura el grupo y tema de arriba, luego presiona Generar.</p>
       </div>
       
       <div class="flex justify-end gap-3 mt-6">

@@ -509,16 +509,14 @@ function solicitarExamenIA() {
   const grupoTexto = grupoSelect.options[grupoSelect.selectedIndex].text;
   const tema = temaInput.value.trim() || 'Temas generales';
   
-  // Creamos el texto de instrucciones directo
-  const textoPrompt = `Actúa como un profesor de ingeniería. Genera un examen de 20 preguntas sobre "${tema}" para el grupo "${grupoTexto}". REGLAS ANTI-PLAGIO: Usa datos numéricos aleatorios y casos prácticos de la industria en México. Pon las respuestas correctas al final en una sección oculta (<details>). Devuelve el examen en un bloque de código HTML oscuro compatible con Tailwind CSS.`;
+  const textoPrompt = `Actúa como un profesor de ingeniería de la UTC. Genera un examen de 5 preguntas sobre "${tema}" para el grupo "${grupoTexto}". Asegúrate de que las matemáticas sean exactas. REGLAS ANTI-PLAGIO: Usa datos numéricos aleatorios y casos prácticos de la industria en México. Pon las respuestas correctas al final en una sección oculta (<details>). Devuelve el examen formateado en un bloque de código HTML oscuro usando Tailwind CSS.`;
 
-  // Cambiamos la interfaz en la pantalla para darte el control total
   const contenedor = document.getElementById('contenedor-preguntas');
   contenedor.innerHTML = `
-    <div class="p-4 bg-[var(--bg)] border border-[var(--border)] rounded-lg space-y-3">
-      <p class="text-sm font-semibold text-[var(--primary)]">¡Instrucciones listas para Kimi K3!</p>
+    <div class="p-4 bg-[var(--bg)] border border-[var(--border)] rounded-lg space-y-4">
+      <p class="text-sm font-semibold text-[var(--primary)]">1. Copia y genera en Kimi.ai:</p>
       
-      <textarea id="txt-prompt-ia" class="input w-full h-24 text-xs font-mono bg-[#0B0F14]" readonly>${textoPrompt}</textarea>
+      <textarea id="txt-prompt-ia" class="input w-full h-20 text-xs font-mono bg-[#0B0F14]" readonly>${textoPrompt}</textarea>
       
       <div class="flex gap-2">
         <button class="btn btn-sm btn-ghost w-1/2" onclick="document.getElementById('txt-prompt-ia').select(); document.execCommand('copy'); alert('¡Copiado!');">
@@ -528,8 +526,32 @@ function solicitarExamenIA() {
           <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Kimi.ai
         </a>
       </div>
+
+      <div class="border-t border-[var(--border)] pt-3 space-y-2">
+        <p class="text-sm font-semibold text-[var(--accent)]">2. Pega el código HTML resultante aquí:</p>
+        <textarea id="codigo-html-kimi" class="input w-full h-24 text-xs font-mono bg-[#0B0F14]" placeholder="Pega aquí el código <div> o HTML que te dé Kimi..."></textarea>
+        <button class="btn btn-sm btn-accent w-full justify-center" onclick="renderizarYGuardarExamen()">
+          <i class="fa-solid fa-eye"></i> Visualizar e Inyectar Examen
+        </button>
+      </div>
     </div>
   `;
+}
+
+// Esta función mágica agarra lo que te dio Kimi y lo mete directo a tu pantalla
+function renderizarYGuardarExamen() {
+  const codigo = document.getElementById('codigo-html-kimi').value.trim();
+  if(!codigo) {
+    alert('Primero pega el código que te dio la IA.');
+    return;
+  }
+  // Inyectamos el examen directamente en el contenedor para que tus alumnos lo respondan
+  document.getElementById('contenedor-preguntas').innerHTML = `
+    <div class="p-4 bg-[var(--card)] border border-[var(--border)] rounded-xl mt-4">
+      ${codigo}
+    </div>
+  `;
+  toast('Examen cargado con éxito', 'success');
 }
 
 init();

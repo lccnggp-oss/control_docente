@@ -498,8 +498,42 @@ function activarModuloExamenes() {
 }
 
 function solicitarExamenIA() {
-  const contenedor = document.getElementById('contenedor-preguntas');
-  contenedor.innerHTML = `<p class="text-[var(--primary)] text-sm"><i class="fa-solid fa-spinner animate-spin"></i> Kimi K3 está diseñando reactivos únicos...</p>`;
+  const grupoSelect = document.getElementById('selector-grupo-ia');
+  const grupoTexto = grupoSelect.options[grupoSelect.selectedIndex].text;
+  const tema = document.getElementById('tema-examen-ia').value.trim() || 'Temas generales de la materia';
+  
+  if(!grupoSelect.value) {
+    alert('Por favor, selecciona primero un grupo.');
+    return;
+  }
+
+  // Estructuramos las instrucciones maestras para Kimi K3
+  const promptMaestro = `Actúa como un profesor experto de ingeniería. Genera un examen en formato de código HTML limpio (estilo tarjeta oscura, usando Tailwind CSS si es posible) de 5 preguntas sobre "${tema}" adaptado para mi grupo "${grupoTexto}". 
+
+REGLAS ESTRICTAS ANTI-PLAGIO:
+1. Si hay problemas matemáticos o lógicos, inventa datos numéricos aleatorios y únicos.
+2. Si son preguntas teóricas, utiliza casos de estudio prácticos o escenarios del entorno industrial real en México.
+3. Pon las respuestas correctas al final en una sección colapsable (<details>) para que pueda calificar rápido.
+
+Devuelve únicamente el bloque de código HTML listo para insertar en mi aplicación escolar.`;
+
+  // Copiar automáticamente el texto al portapapeles del celular
+  navigator.clipboard.writeText(promptMaestro).then(() => {
+    const contenedor = document.getElementById('contenedor-preguntas');
+    contenedor.innerHTML = `
+      <div class="text-center p-2 bg-[var(--primary-bg)] border border-[var(--primary)] rounded-lg">
+        <p class="text-[var(--primary)] text-sm font-semibold mb-1">¡Instrucciones copiadas al celular!</p>
+        <p class="text-xs text-[var(--muted)]">Abre Kimi, pega el texto y cuando te dé el examen en HTML, lo pegaremos aquí.</p>
+      </div>
+    `;
+    
+    // Abrir Kimi en una nueva pestaña después de 2 segundos
+    setTimeout(() => {
+      window.open('https://kimi.ai', '_blank');
+    }, 2000);
+  }).catch(err => {
+    alert('No se pudo copiar automáticamente. Copia el texto manualmente.');
+  });
 }
 
 init();
